@@ -85,9 +85,9 @@ export default function UploadPage() {
       >
         <Card className="rounded-[34px] p-0 overflow-hidden">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="relative p-6 sm:p-8">
+            <div className="relative flex flex-col p-6 sm:p-8">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,101,242,0.08),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(18,179,168,0.1),transparent_30%)]" />
-              <div className="relative">
+              <div className="relative flex flex-1 flex-col">
                 <div className="flex items-center justify-between">
                   <Badge variant="accent">Secure Intake</Badge>
                   <ShieldCheck className="h-5 w-5 text-accent-600" />
@@ -102,7 +102,7 @@ export default function UploadPage() {
                 <div
                   {...getRootProps()}
                   className={clsx(
-                    'mt-8 cursor-pointer rounded-[30px] border border-dashed p-6 transition duration-300',
+                    'mt-8 flex flex-1 cursor-pointer flex-col items-center justify-center rounded-[30px] border border-dashed p-6 transition duration-300',
                     isDragActive
                       ? 'border-primary-300 bg-primary-50/60 shadow-[0_24px_60px_-34px_rgba(0,101,242,0.42)]'
                       : 'border-white/60 bg-white/58 hover:-translate-y-1 hover:bg-white/72',
