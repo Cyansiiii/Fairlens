@@ -1,47 +1,107 @@
-import { Card, Button } from '../components/ui';
-import { useNavigate } from 'react-router-dom';
-import { Shield, FileCheck, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import {
+  BadgeCheck,
+  CheckCircle2,
+  Download,
+  FileCheck2,
+  ShieldCheck,
+} from 'lucide-react';
+
+import AppShell from '../components/premium/AppShell';
+import Badge from '../components/ui/Badge';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
 
 export default function Certificate() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-surface-secondary">
-      <header className="bg-white border-b border-border px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/dashboard')}>
-              <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
+    <AppShell
+      eyebrow="Certificate Composer"
+      title="Package fairness evidence into an artifact worth sharing."
+      description="The certificate screen now looks like the premium finish to the workflow: evidence summary, compliance mappings, and a polished handoff moment."
+      actions={(
+        <>
+          <Button variant="secondary" size="lg" onClick={() => navigate('/audit/demo-001/results')}>
+            Back to Results
+          </Button>
+          <Button size="lg" onClick={() => navigate('/dashboard')}>
+            Return to Dashboard
+          </Button>
+        </>
+      )}
+    >
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="grid gap-6 xl:grid-cols-[1fr_1fr]"
+      >
+        <Card tone="accent" className="rounded-[34px]">
+          <Badge variant="accent">Certificate preview</Badge>
+          <div className="mt-6 rounded-[30px] border border-white/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.66))] p-6 shadow-[0_24px_60px_-34px_rgba(17,33,59,0.38)]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">FairLens Certificate</p>
+                <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
+                  FairScore 84 · Conditional approval
+                </h2>
               </div>
-              <span className="text-xl font-bold text-text-primary">FairLens</span>
+              <BadgeCheck className="h-8 w-8 text-success-600" />
             </div>
-            <span className="text-text-tertiary">/</span>
-            <span className="text-sm font-medium text-text-secondary">Certificate</span>
+            <div className="section-divider my-6" />
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                'Mapped to EU AI Act controls',
+                'Linked to India DPDP posture',
+                'Includes mitigation summary',
+                'Ready for stakeholder review',
+              ].map((item) => (
+                <div key={item} className="rounded-[20px] border border-white/55 bg-white/62 px-4 py-4 text-sm text-text-secondary">
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </header>
+        </Card>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-2xl font-bold text-text-primary mb-2">FairScore Certificate</h1>
-          <p className="text-text-secondary mb-8">
-            Download your compliance-grade audit certificate with regulatory mappings.
-          </p>
+        <div className="grid gap-6">
+          <Card className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="neutral">Included evidence</Badge>
+              <FileCheck2 className="h-5 w-5 text-text-tertiary" />
+            </div>
+            <div className="mt-5 space-y-4">
+              {[
+                'Audit narrative summary',
+                'Affected subgroup breakdown',
+                'Mitigation steps and recovered score',
+                'Compliance control mapping',
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3 text-sm text-text-secondary">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-success-500" />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </Card>
 
-          <Card className="text-center py-16">
-            <FileCheck className="w-16 h-16 text-success-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-text-primary mb-2">Coming in Phase 5</h3>
-            <p className="text-text-secondary mb-6 max-w-md mx-auto">
-              The Certificate page will display a preview of your FairScore certificate with options to download PDF and embed a shareable badge.
+          <Card tone="success" className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="success">Premium finish</Badge>
+              <ShieldCheck className="h-5 w-5 text-success-600" />
+            </div>
+            <p className="mt-4 text-sm leading-7 text-text-secondary">
+              Certification should feel like a polished output, not an afterthought. This redesign gives the artifact a final, trustworthy presentation layer.
             </p>
-            <Button variant="ghost" onClick={() => navigate(-1)}>
-              <ArrowLeft className="w-4 h-4" /> Go Back
+            <Button className="mt-6 w-full">
+              Download Certificate
+              <Download className="h-4 w-4" />
             </Button>
           </Card>
-        </motion.div>
-      </main>
-    </div>
+        </div>
+      </motion.section>
+    </AppShell>
   );
 }

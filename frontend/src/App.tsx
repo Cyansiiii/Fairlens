@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+import SmoothScroll from './components/premium/SmoothScroll';
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Upload from './pages/NewAudit/Upload';
@@ -24,6 +25,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <SmoothScroll />
         <Routes>
           {/* Public */}
           <Route path="/" element={<Landing />} />

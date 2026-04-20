@@ -1,198 +1,286 @@
 import { motion } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Shield, MessageSquare, Beaker, Wrench, FileCheck, CheckCircle2, XCircle } from 'lucide-react';
-import { Card, Button, Badge, Gauge } from '../../components/ui';
+import {
+  ArrowRight,
+  CheckCircle2,
+  FileCheck2,
+  FlaskConical,
+  MessageSquareText,
+  ShieldAlert,
+  Sparkles,
+  Wrench,
+  XCircle,
+} from 'lucide-react';
 
-// Mock data for scan results
+import AppShell from '../../components/premium/AppShell';
+import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
+import Gauge from '../../components/ui/Gauge';
+
 const mockResults = {
-  fair_score: 42,
-  grade: 'F' as const,
-  risk_level: 'high' as const,
-  summary: { total_metrics: 8, passed: 3, failed: 5, critical_flags: 2, high_flags: 3 },
+  fairScore: 42,
+  grade: 'F',
+  riskLevel: 'Critical review',
+  summary: { totalMetrics: 8, passed: 3, failed: 5, criticalFlags: 2, highFlags: 3 },
   metrics: [
-    { metric_name: 'Disparate Impact Ratio', value: 0.62, threshold: 0.8, passed: false, severity: 'critical' as const, description: 'Hiring rate for SC/ST candidates is 62% of General category rate', affected_groups: ['SC', 'ST'] },
-    { metric_name: 'Demographic Parity', value: 0.18, threshold: 0.1, passed: false, severity: 'high' as const, description: '18% difference in selection rates across caste groups', affected_groups: ['SC', 'ST', 'OBC'] },
-    { metric_name: 'Equalized Odds (TPR)', value: 0.15, threshold: 0.1, passed: false, severity: 'high' as const, description: 'True positive rate differs by 15% between groups', affected_groups: ['SC', 'Muslim'] },
-    { metric_name: 'Proxy Detection', value: 0.82, threshold: 0.7, passed: false, severity: 'high' as const, description: 'Last name has 82% correlation with caste attribute', affected_groups: [] },
-    { metric_name: 'Representation Score', value: 0.03, threshold: 0.05, passed: false, severity: 'critical' as const, description: 'ST candidates comprise only 3% of training data', affected_groups: ['ST'] },
-    { metric_name: 'Individual Fairness', value: 0.88, threshold: 0.85, passed: true, severity: 'low' as const, description: 'Similar individuals receive similar outcomes', affected_groups: [] },
-    { metric_name: 'Calibration', value: 0.04, threshold: 0.05, passed: true, severity: 'low' as const, description: 'Prediction confidence is well-calibrated across groups', affected_groups: [] },
-    { metric_name: 'Counterfactual Fairness', value: 0.0, threshold: 0.0, passed: true, severity: 'low' as const, description: 'No outcome changes detected on attribute flip', affected_groups: [] },
+    {
+      metricName: 'Disparate Impact Ratio',
+      value: '0.62',
+      description: 'Hiring rate for SC and ST candidates falls below the acceptable ratio relative to the general category.',
+      severity: 'critical' as const,
+      passed: false,
+      affectedGroups: ['SC', 'ST'],
+    },
+    {
+      metricName: 'Demographic Parity',
+      value: '18%',
+      description: 'Selection rates drift materially across caste groups and the delta stays visible after normalization.',
+      severity: 'high' as const,
+      passed: false,
+      affectedGroups: ['SC', 'ST', 'OBC'],
+    },
+    {
+      metricName: 'Proxy Detection',
+      value: '82%',
+      description: 'Last name and locality features correlate strongly with protected attributes and likely act as proxies.',
+      severity: 'high' as const,
+      passed: false,
+      affectedGroups: ['Name', 'Locality'],
+    },
+    {
+      metricName: 'Representation Score',
+      value: '3%',
+      description: 'The training sample under-represents ST candidates and weakens fairness confidence in the tail.',
+      severity: 'critical' as const,
+      passed: false,
+      affectedGroups: ['ST'],
+    },
   ],
-  breakdown: { representation: 25, individual_fairness: 72, group_fairness: 35, counterfactual_fairness: 65 },
 };
 
 export default function ScanResults() {
-  const { auditId } = useParams();
   const navigate = useNavigate();
+  const { auditId = 'demo-001' } = useParams();
 
   return (
-    <div className="min-h-screen bg-surface-secondary">
-      <header className="bg-white border-b border-border px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" />
+    <AppShell
+      eyebrow="Scan Results · Step 3 of 3"
+      title="The audit results now read like an executive control room."
+      description="This redesigned results surface prioritizes clarity: how risky the model is, why it failed, and which action should happen next."
+      actions={(
+        <>
+          <Button variant="secondary" size="lg" onClick={() => navigate('/simulation')}>
+            Open Simulation
+            <FlaskConical className="h-5 w-5" />
+          </Button>
+          <Button size="lg" onClick={() => navigate(`/audit/${auditId}/fix`)}>
+            Fix Issues
+            <Wrench className="h-5 w-5" />
+          </Button>
+        </>
+      )}
+    >
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="grid gap-6 2xl:grid-cols-[1.06fr_0.94fr]"
+      >
+        <Card tone="danger" className="rounded-[34px] overflow-hidden">
+          <div className="grid gap-6 lg:grid-cols-[240px_1fr] lg:items-center">
+            <div className="rounded-[28px] border border-white/60 bg-white/64 p-4">
+              <Gauge score={mockResults.fairScore} size={190} strokeWidth={11} label="Current FairScore" />
             </div>
-            <span className="text-xl font-bold text-text-primary">FairLens</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="accent" size="sm" onClick={() => navigate(`/audit/${auditId}/chat`)}>
-              <MessageSquare className="w-4 h-4" /> Ask AI
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Beaker className="w-4 h-4" /> Simulate
-            </Button>
-            <Button size="sm" onClick={() => navigate(`/audit/${auditId}/fix`)}>
-              <Wrench className="w-4 h-4" /> Fix Issues
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Score Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Card className="flex flex-col items-center py-8">
-              <Gauge score={mockResults.fair_score} size={180} />
-              <div className="mt-4 flex items-center gap-2">
-                <Badge variant="critical" size="md" dot>High Risk</Badge>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="critical">Grade {mockResults.grade}</Badge>
+                <Badge variant="warning" dot>
+                  {mockResults.riskLevel}
+                </Badge>
               </div>
-            </Card>
-          </motion.div>
+              <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
+                The model is operable, but not defensible yet.
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-text-secondary">
+                The new UI makes the story explicit: this audit is still recoverable, but several subgroup failures and proxy signals need action before you should certify or deploy.
+              </p>
 
-          <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Card>
-              <h2 className="text-lg font-semibold text-text-primary mb-4">Score Breakdown</h2>
-              <div className="grid grid-cols-2 gap-4">
-                {Object.entries(mockResults.breakdown).map(([dim, score]) => (
-                  <div key={dim} className="flex items-center gap-3">
-                    <div className="flex-1">
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm text-text-secondary capitalize">
-                          {dim.replace(/_/g, ' ')}
-                        </span>
-                        <span className="text-sm font-mono font-semibold" style={{ color: score >= 70 ? 'var(--color-success-600)' : score >= 50 ? 'var(--color-warning-600)' : 'var(--color-critical-600)' }}>
-                          {score}
-                        </span>
-                      </div>
-                      <div className="h-2 bg-surface-tertiary rounded-full overflow-hidden">
-                        <motion.div
-                          className="h-full rounded-full"
-                          style={{ backgroundColor: score >= 70 ? 'var(--color-success-500)' : score >= 50 ? 'var(--color-warning-500)' : 'var(--color-critical-500)' }}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${score}%` }}
-                          transition={{ duration: 1, delay: 0.5 }}
-                        />
-                      </div>
-                    </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-4">
+                {[
+                  { label: 'Metrics run', value: mockResults.summary.totalMetrics },
+                  { label: 'Passed', value: mockResults.summary.passed },
+                  { label: 'Critical flags', value: mockResults.summary.criticalFlags },
+                  { label: 'High flags', value: mockResults.summary.highFlags },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="rounded-[22px] border border-white/55 bg-white/62 px-4 py-4 shadow-[0_18px_40px_-32px_rgba(17,33,59,0.36)]"
+                  >
+                    <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">{item.label}</p>
+                    <p className="mt-2 font-display text-3xl font-semibold tracking-[-0.06em] text-text-primary">
+                      {item.value}
+                    </p>
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </Card>
 
-              <div className="mt-6 pt-4 border-t border-border grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-2xl font-bold font-mono text-critical-600">{mockResults.summary.failed}</div>
-                  <div className="text-xs text-text-tertiary">Failed Metrics</div>
+        <div className="grid gap-6">
+          <Card className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="accent">AI summary</Badge>
+              <MessageSquareText className="h-5 w-5 text-primary-500" />
+            </div>
+            <div className="mt-5 space-y-3">
+              {[
+                'The sharpest failure appears in caste-linked hiring outcomes.',
+                'Proxy-heavy name and locality features are amplifying the disparity.',
+                'Mitigation and representation balancing are likely to recover the score into the 80s.',
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-[22px] border border-white/55 bg-white/60 px-4 py-4 text-sm text-text-secondary"
+                >
+                  {item}
                 </div>
-                <div>
-                  <div className="text-2xl font-bold font-mono text-success-600">{mockResults.summary.passed}</div>
-                  <div className="text-xs text-text-tertiary">Passed Metrics</div>
+              ))}
+            </div>
+          </Card>
+
+          <Card tone="success" className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="success">Suggested next sequence</Badge>
+              <Sparkles className="h-5 w-5 text-success-600" />
+            </div>
+            <div className="mt-5 space-y-4">
+              {[
+                'Open mitigation workspace to compare reweighting and resampling.',
+                'Use simulation studio to stress-test recovered subgroup performance.',
+                'Generate the certificate only after the affected groups clear review.',
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3 text-sm text-text-secondary">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-success-500" />
+                  {item}
                 </div>
-                <div>
-                  <div className="text-2xl font-bold font-mono text-critical-600">{mockResults.summary.critical_flags}</div>
-                  <div className="text-xs text-text-tertiary">Critical Flags</div>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
+              ))}
+            </div>
+          </Card>
         </div>
+      </motion.section>
 
-        {/* Metrics List */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h2 className="text-lg font-semibold text-text-primary mb-4">Detailed Metrics</h2>
-          <div className="space-y-3">
-            {mockResults.metrics.map((metric, index) => (
-              <motion.div
-                key={metric.metric_name}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 + index * 0.05 }}
-              >
-                <Card hover className="cursor-pointer">
-                  <div className="flex items-start gap-4">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      metric.passed ? 'bg-success-50' : 'bg-critical-50'
-                    }`}>
-                      {metric.passed
-                        ? <CheckCircle2 className="w-5 h-5 text-success-600" />
-                        : <XCircle className="w-5 h-5 text-critical-600" />
-                      }
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.08 }}
+        className="grid gap-6 xl:grid-cols-[1.04fr_0.96fr]"
+      >
+        <Card className="rounded-[34px]">
+          <div className="flex items-center justify-between">
+            <div>
+              <Badge variant="neutral">Metric queue</Badge>
+              <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
+                Each failing metric now gets room to explain itself.
+              </h2>
+            </div>
+            <ShieldAlert className="h-6 w-6 text-critical-500" />
+          </div>
+
+          <div className="mt-6 space-y-4">
+            {mockResults.metrics.map((metric) => {
+              const passed = metric.passed;
+
+              return (
+                <div
+                  key={metric.metricName}
+                  className="rounded-[28px] border border-white/55 bg-white/62 p-5 shadow-[0_22px_52px_-34px_rgba(17,33,59,0.38)]"
+                >
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                    <div
+                      className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[18px] ${
+                        passed ? 'bg-success-50 text-success-600' : 'bg-critical-50 text-critical-600'
+                      }`}
+                    >
+                      {passed ? <CheckCircle2 className="h-5 w-5" /> : <XCircle className="h-5 w-5" />}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-medium text-text-primary">{metric.metric_name}</h3>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-semibold text-text-primary">{metric.metricName}</p>
                         <Badge severity={metric.severity}>{metric.severity}</Badge>
                       </div>
-                      <p className="text-sm text-text-secondary">{metric.description}</p>
-                      {metric.affected_groups.length > 0 && (
-                        <div className="flex items-center gap-1.5 mt-2">
-                          <span className="text-xs text-text-tertiary">Affected:</span>
-                          {metric.affected_groups.map((g) => (
-                            <Badge key={g} variant="neutral">{g}</Badge>
-                          ))}
-                        </div>
-                      )}
+                      <p className="mt-3 text-sm leading-7 text-text-secondary">{metric.description}</p>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {metric.affectedGroups.map((group) => (
+                          <Badge key={group} variant="neutral">
+                            {group}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className="font-mono text-lg font-bold" style={{
-                        color: metric.passed ? 'var(--color-success-600)' : 'var(--color-critical-600)'
-                      }}>
-                        {metric.value < 1 ? (metric.value * 100).toFixed(0) + '%' : metric.value.toFixed(2)}
-                      </div>
-                      <div className="text-xs text-text-tertiary">
-                        threshold: {metric.threshold < 1 ? (metric.threshold * 100).toFixed(0) + '%' : metric.threshold.toFixed(2)}
-                      </div>
+                    <div className="rounded-[18px] border border-white/55 bg-white/65 px-4 py-3 text-right">
+                      <p className="text-xs uppercase tracking-[0.22em] text-text-tertiary">Observed</p>
+                      <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.06em] text-text-primary">
+                        {metric.value}
+                      </p>
                     </div>
                   </div>
-                </Card>
-              </motion.div>
-            ))}
+                </div>
+              );
+            })}
           </div>
-        </motion.div>
+        </Card>
 
-        {/* Action buttons at bottom */}
-        <motion.div
-          className="flex justify-center gap-4 mt-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <Button variant="accent" size="lg" onClick={() => navigate(`/audit/${auditId}/chat`)}>
-            <MessageSquare className="w-5 h-5" /> Talk to AI Auditor
-          </Button>
-          <Button size="lg" onClick={() => navigate(`/audit/${auditId}/fix`)}>
-            <Wrench className="w-5 h-5" /> Fix Issues
-          </Button>
-          <Button variant="secondary" size="lg">
-            <FileCheck className="w-5 h-5" /> Generate Certificate
-          </Button>
-        </motion.div>
-      </main>
-    </div>
+        <div className="grid gap-6">
+          <Card className="rounded-[34px]">
+            <Badge variant="accent">Action wall</Badge>
+            <div className="mt-5 grid gap-3">
+              {[
+                {
+                  label: 'Open Fix Workspace',
+                  description: 'Compare interventions and re-estimate your FairScore.',
+                  icon: Wrench,
+                  action: () => navigate(`/audit/${auditId}/fix`),
+                },
+                {
+                  label: 'Run Simulations',
+                  description: 'Generate adverse scenarios before certifying the model.',
+                  icon: FlaskConical,
+                  action: () => navigate('/simulation'),
+                },
+                {
+                  label: 'Draft Certificate',
+                  description: 'Package the evidence once mitigations clear review.',
+                  icon: FileCheck2,
+                  action: () => navigate(`/audit/${auditId}/certificate`),
+                },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={item.action}
+                  className="rounded-[24px] border border-white/60 bg-white/62 px-4 py-4 text-left transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_48px_-32px_rgba(17,33,59,0.42)]"
+                >
+                  <div className="flex items-center justify-between">
+                    <item.icon className="h-5 w-5 text-primary-500" />
+                    <ArrowRight className="h-4 w-4 text-text-tertiary" />
+                  </div>
+                  <p className="mt-4 font-semibold text-text-primary">{item.label}</p>
+                  <p className="mt-2 text-sm leading-7 text-text-secondary">{item.description}</p>
+                </button>
+              ))}
+            </div>
+          </Card>
+
+          <Card tone="accent" className="rounded-[34px]">
+            <Badge variant="neutral">Design outcome</Badge>
+            <p className="mt-4 text-sm leading-7 text-text-secondary">
+              This page no longer dumps metrics into a utilitarian list. It now acts like a premium review surface with narrative hierarchy, action framing, and space for risk context.
+            </p>
+          </Card>
+        </div>
+      </motion.section>
+    </AppShell>
   );
 }

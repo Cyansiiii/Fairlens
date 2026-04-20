@@ -1,13 +1,61 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { clsx } from 'clsx';
 import { motion } from 'framer-motion';
-import { Shield, ArrowRight, ArrowLeft, Settings } from 'lucide-react';
-import { Card, Button } from '../../components/ui';
+import { useNavigate } from 'react-router-dom';
+import {
+  ArrowRight,
+  Bot,
+  CheckCircle2,
+  ScanSearch,
+  Settings2,
+  SlidersHorizontal,
+} from 'lucide-react';
+
+import AppShell from '../../components/premium/AppShell';
+import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
 
 const SENSITIVE_ATTRIBUTES = [
-  'gender', 'sex', 'caste', 'religion', 'age', 'name', 'first_name',
-  'last_name', 'state', 'language', 'disability', 'ethnicity', 'race',
-  'marital_status', 'nationality', 'locality',
+  'gender',
+  'sex',
+  'caste',
+  'religion',
+  'age',
+  'name',
+  'first_name',
+  'last_name',
+  'state',
+  'language',
+  'disability',
+  'ethnicity',
+  'race',
+  'marital_status',
+  'nationality',
+  'locality',
+];
+
+const frameworks = [
+  {
+    value: 'all',
+    label: 'All frameworks',
+    description: 'EU AI Act, India DPDP, NYC LL144, and internal fairness review.',
+  },
+  {
+    value: 'eu_ai_act',
+    label: 'EU AI Act',
+    description: 'High-risk system governance, transparency, and data quality mappings.',
+  },
+  {
+    value: 'india_dpdp',
+    label: 'India DPDP',
+    description: 'Consent posture, data minimization, and accountable processing evidence.',
+  },
+  {
+    value: 'nyc_ll144',
+    label: 'NYC LL144',
+    description: 'Automated employment decision support tool review posture.',
+  },
 ];
 
 export default function ConfigurePage() {
@@ -16,126 +64,180 @@ export default function ConfigurePage() {
   const [targetColumn, setTargetColumn] = useState('decision');
   const [framework, setFramework] = useState('all');
 
-  const toggleAttribute = (attr: string) => {
-    setSelectedAttrs((prev) =>
-      prev.includes(attr) ? prev.filter((a) => a !== attr) : [...prev, attr]
+  const toggleAttribute = (attribute: string) => {
+    setSelectedAttrs((previous) =>
+      previous.includes(attribute)
+        ? previous.filter((item) => item !== attribute)
+        : [...previous, attribute],
     );
   };
 
   const handleStartScan = () => {
-    // TODO: Phase 1 — Call configureAudit + triggerScan API
     navigate('/audit/demo-001/results');
   };
 
   return (
-    <div className="min-h-screen bg-surface-secondary">
-      <header className="bg-white border-b border-border px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" />
+    <AppShell
+      eyebrow="New Audit · Step 2 of 3"
+      title="Shape the audit before the engine runs."
+      description="Configuration now feels like a curated control panel: protected attributes, target signals, and compliance posture are staged in one premium review surface."
+      actions={(
+        <>
+          <Badge variant="success" size="md">
+            Upload staged successfully
+          </Badge>
+          <Button variant="secondary" size="lg" onClick={() => navigate('/audit/new/upload')}>
+            Back to Upload
+          </Button>
+        </>
+      )}
+    >
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="grid gap-6 xl:grid-cols-[1.08fr_0.92fr]"
+      >
+        <div className="grid gap-6">
+          <Card className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="accent">Protected attributes</Badge>
+              <ScanSearch className="h-5 w-5 text-primary-500" />
             </div>
-            <span className="text-xl font-bold text-text-primary">FairLens</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-text-tertiary">
-            <span className="text-success-600">✓ Upload</span>
-            <span>→</span>
-            <span className="text-primary-600 font-medium">2. Configure</span>
-            <span>→</span>
-            <span>3. Results</span>
-          </div>
+            <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
+              Confirm the classes that deserve scrutiny.
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-text-secondary">
+              The intake layer suggested likely protected columns. Keep the ones you want in scope and add any additional fairness dimensions the model should be judged against.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              {SENSITIVE_ATTRIBUTES.map((attribute) => {
+                const active = selectedAttrs.includes(attribute);
+
+                return (
+                  <button
+                    key={attribute}
+                    type="button"
+                    onClick={() => toggleAttribute(attribute)}
+                    className={clsx(
+                      'rounded-full px-4 py-2.5 text-sm font-semibold capitalize transition duration-200',
+                      active
+                        ? 'bg-[var(--gradient-brand)] text-white shadow-[0_18px_42px_-22px_rgba(0,101,242,0.78)]'
+                        : 'glass-chip text-text-secondary hover:-translate-y-0.5 hover:text-text-primary',
+                    )}
+                  >
+                    {attribute.replace('_', ' ')}
+                  </button>
+                );
+              })}
+            </div>
+          </Card>
+
+          <Card className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="neutral">Target signal</Badge>
+              <SlidersHorizontal className="h-5 w-5 text-text-tertiary" />
+            </div>
+            <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
+              Define the outcome column the model influences.
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-text-secondary">
+              Use the decision, approval, risk, or routing field that captures the model’s real-world outcome. FairLens will align the scorecards and explanations around it.
+            </p>
+            <div className="mt-6">
+              <input
+                type="text"
+                value={targetColumn}
+                onChange={(event) => setTargetColumn(event.target.value)}
+                className="glass-input"
+                placeholder="e.g. decision, approval_outcome, risk_band"
+              />
+            </div>
+          </Card>
+
+          <Card className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="accent">Regulatory posture</Badge>
+              <Settings2 className="h-5 w-5 text-primary-500" />
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {frameworks.map((item) => (
+                <button
+                  key={item.value}
+                  type="button"
+                  onClick={() => setFramework(item.value)}
+                  className={clsx(
+                    'rounded-[26px] border px-4 py-4 text-left transition duration-200',
+                    framework === item.value
+                      ? 'border-primary-100 bg-[linear-gradient(135deg,rgba(0,101,242,0.12),rgba(18,179,168,0.12))] shadow-[0_20px_48px_-30px_rgba(0,101,242,0.42)]'
+                      : 'border-white/55 bg-white/58 hover:-translate-y-1 hover:shadow-[0_22px_50px_-32px_rgba(17,33,59,0.36)]',
+                  )}
+                >
+                  <p className="font-semibold text-text-primary">{item.label}</p>
+                  <p className="mt-2 text-sm leading-7 text-text-secondary">{item.description}</p>
+                </button>
+              ))}
+            </div>
+          </Card>
         </div>
-      </header>
 
-      <main className="max-w-2xl mx-auto px-6 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <h1 className="text-3xl font-bold text-text-primary mb-2">Configure your audit</h1>
-          <p className="text-text-secondary mb-8">
-            Select the sensitive attributes to check for bias and choose your compliance framework.
-          </p>
-
-          {/* Sensitive Attributes */}
-          <Card className="mb-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Settings className="w-5 h-5 text-text-secondary" />
-              <h2 className="text-lg font-semibold text-text-primary">Sensitive Attributes</h2>
+        <div className="grid gap-6">
+          <Card tone="accent" className="rounded-[34px]">
+            <div className="flex items-center justify-between">
+              <Badge variant="accent">AI setup brief</Badge>
+              <Bot className="h-5 w-5 text-primary-500" />
             </div>
-            <p className="text-sm text-text-secondary mb-4">
-              Select which attributes should be checked for bias. We've auto-detected some from your data.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {SENSITIVE_ATTRIBUTES.map((attr) => (
-                <button
-                  key={attr}
-                  onClick={() => toggleAttribute(attr)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
-                    selectedAttrs.includes(attr)
-                      ? 'bg-primary-100 text-primary-700 border border-primary-300'
-                      : 'bg-surface-tertiary text-text-secondary border border-transparent hover:border-border'
-                  }`}
-                >
-                  {attr}
-                </button>
-              ))}
-            </div>
-          </Card>
-
-          {/* Target Column */}
-          <Card className="mb-6">
-            <h2 className="text-lg font-semibold text-text-primary mb-4">Target Column</h2>
-            <p className="text-sm text-text-secondary mb-3">
-              The outcome/decision column your model predicts (e.g., "hired", "approved", "risk_score").
-            </p>
-            <input
-              type="text"
-              value={targetColumn}
-              onChange={(e) => setTargetColumn(e.target.value)}
-              className="w-full px-4 py-2.5 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              placeholder="e.g., decision, outcome, label"
-            />
-          </Card>
-
-          {/* Regulatory Framework */}
-          <Card className="mb-8">
-            <h2 className="text-lg font-semibold text-text-primary mb-4">Regulatory Framework</h2>
-            <div className="grid grid-cols-2 gap-3">
+            <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
+              Recommended scan profile
+            </h2>
+            <div className="mt-5 space-y-3">
               {[
-                { value: 'all', label: 'All Frameworks', desc: 'EU AI Act + India DPDP + NYC LL144' },
-                { value: 'eu_ai_act', label: 'EU AI Act', desc: 'Articles 9, 10, 13, 15' },
-                { value: 'india_dpdp', label: 'India DPDP', desc: 'Sections 4, 5, 8' },
-                { value: 'nyc_ll144', label: 'NYC LL144', desc: 'Local Law 144' },
-              ].map((fw) => (
-                <button
-                  key={fw.value}
-                  onClick={() => setFramework(fw.value)}
-                  className={`p-4 rounded-xl border text-left transition-all duration-200 cursor-pointer ${
-                    framework === fw.value
-                      ? 'border-primary-400 bg-primary-50 ring-2 ring-primary-200'
-                      : 'border-border hover:border-border-strong'
-                  }`}
+                `Audit ${selectedAttrs.length} protected attributes in the first pass.`,
+                `Treat "${targetColumn}" as the decisive model outcome column.`,
+                `Attach ${framework.split('_').join(' ')} narrative mapping to the certificate draft.`,
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-[22px] border border-white/55 bg-white/62 px-4 py-4 text-sm text-text-secondary"
                 >
-                  <p className="font-medium text-sm text-text-primary">{fw.label}</p>
-                  <p className="text-xs text-text-secondary mt-1">{fw.desc}</p>
-                </button>
+                  {item}
+                </div>
               ))}
             </div>
           </Card>
 
-          {/* Actions */}
-          <div className="flex justify-between items-center">
-            <Button variant="ghost" onClick={() => navigate(-1)}>
-              <ArrowLeft className="w-4 h-4" /> Back
-            </Button>
-            <Button size="lg" onClick={handleStartScan} disabled={selectedAttrs.length === 0}>
-              Start Bias Scan
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </div>
-        </motion.div>
-      </main>
-    </div>
+          <Card tone="success" className="rounded-[34px]">
+            <Badge variant="success">What happens next</Badge>
+            <div className="mt-5 space-y-4">
+              {[
+                'Metric engine runs fairness bundles and proxy detection.',
+                'AI copilot writes the executive summary in plain language.',
+                'Results screen prioritizes the highest-risk subgroup failures.',
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3 text-sm text-text-secondary">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-success-500" />
+                  {item}
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="rounded-[34px]">
+            <Badge variant="neutral">Premium detail</Badge>
+            <p className="mt-4 text-sm leading-7 text-text-secondary">
+              This configuration page now reads like a control surface instead of a form. It sets up the scan with clear hierarchy, richer cards, and better decision framing.
+            </p>
+          </Card>
+        </div>
+      </motion.section>
+
+      <div className="flex justify-end">
+        <Button size="lg" onClick={handleStartScan} disabled={selectedAttrs.length === 0}>
+          Start Bias Scan
+          <ArrowRight className="h-5 w-5" />
+        </Button>
+      </div>
+    </AppShell>
   );
 }

@@ -1,9 +1,24 @@
 import { useCallback, useState } from 'react';
+import { clsx } from 'clsx';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { motion } from 'framer-motion';
-import { Upload as UploadIcon, FileSpreadsheet, FileCode, X, ArrowRight, Shield, AlertTriangle } from 'lucide-react';
-import { Card, Button, Badge } from '../../components/ui';
+import {
+  AlertTriangle,
+  ArrowRight,
+  FileCode,
+  FileSpreadsheet,
+  LockKeyhole,
+  ShieldCheck,
+  Sparkles,
+  Upload as UploadIcon,
+  X,
+} from 'lucide-react';
+
+import AppShell from '../../components/premium/AppShell';
+import Badge from '../../components/ui/Badge';
+import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
 import { formatFileSize } from '../../utils';
 
 const ACCEPTED_TYPES = {
@@ -27,145 +42,194 @@ export default function UploadPage() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: ACCEPTED_TYPES,
-    maxSize: 2 * 1024 * 1024 * 1024, // 2GB
+    maxSize: 2 * 1024 * 1024 * 1024,
     multiple: false,
   });
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile) {
+      return;
+    }
+
     setUploading(true);
-    // TODO: Phase 1 — Call uploadDataset API
     setTimeout(() => {
       navigate('/audit/new/configure');
-    }, 1500);
+    }, 1200);
   };
 
-  const getFileIcon = (filename: string) => {
-    const ext = filename.split('.').pop()?.toLowerCase();
-    if (ext === 'csv' || ext === 'xlsx') return FileSpreadsheet;
-    return FileCode;
-  };
+  const FileIcon = selectedFile?.name.endsWith('.csv') || selectedFile?.name.endsWith('.xlsx')
+    ? FileSpreadsheet
+    : FileCode;
 
   return (
-    <div className="min-h-screen bg-surface-secondary">
-      {/* Header */}
-      <header className="bg-white border-b border-border px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" />
+    <AppShell
+      eyebrow="New Audit · Step 1 of 3"
+      title="Bring in the dataset or model you want to challenge."
+      description="The redesigned intake surface makes uploads feel deliberate: secure, legible, and ready for a premium audit workflow."
+      actions={(
+        <>
+          <Badge variant="accent" size="md">
+            2 GB upload limit
+          </Badge>
+          <Button variant="secondary" size="lg" onClick={() => navigate('/dashboard')}>
+            Return to Dashboard
+          </Button>
+        </>
+      )}
+    >
+      <motion.section
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]"
+      >
+        <Card className="rounded-[34px] p-0 overflow-hidden">
+          <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="relative p-6 sm:p-8">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,101,242,0.08),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(18,179,168,0.1),transparent_30%)]" />
+              <div className="relative">
+                <div className="flex items-center justify-between">
+                  <Badge variant="accent">Secure Intake</Badge>
+                  <ShieldCheck className="h-5 w-5 text-accent-600" />
+                </div>
+                <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
+                  Drop the asset. FairLens handles the staging.
+                </h2>
+                <p className="mt-3 max-w-xl text-sm leading-7 text-text-secondary">
+                  Upload a dataset, model artifact, or fairness evidence package. The intake layer validates the file type, prepares the schema preview, and routes you into configuration.
+                </p>
+
+                <div
+                  {...getRootProps()}
+                  className={clsx(
+                    'mt-8 cursor-pointer rounded-[30px] border border-dashed p-6 transition duration-300',
+                    isDragActive
+                      ? 'border-primary-300 bg-primary-50/60 shadow-[0_24px_60px_-34px_rgba(0,101,242,0.42)]'
+                      : 'border-white/60 bg-white/58 hover:-translate-y-1 hover:bg-white/72',
+                  )}
+                >
+                  <input {...getInputProps()} />
+
+                  {!selectedFile ? (
+                    <div className="flex min-h-[18rem] flex-col items-center justify-center text-center">
+                      <div className="flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-[24px] gradient-primary shadow-[0_24px_56px_-26px_rgba(0,101,242,0.82)]">
+                        <UploadIcon className="h-8 w-8 text-white" />
+                      </div>
+                      <p className="mt-6 font-display text-2xl font-semibold tracking-[-0.06em] text-text-primary">
+                        {isDragActive ? 'Release to stage your file' : 'Drag, drop, or browse your audit asset'}
+                      </p>
+                      <p className="mt-3 max-w-md text-sm leading-7 text-text-secondary">
+                        CSV, XLSX, PKL, ONNX, and JSON are supported. The new upload surface is tuned to feel like a polished SaaS console, not a generic dropzone.
+                      </p>
+                      <div className="mt-6 flex flex-wrap justify-center gap-2">
+                        {['CSV', 'XLSX', 'PKL', 'ONNX', 'JSON'].map((ext) => (
+                          <span key={ext} className="glass-chip rounded-full px-3 py-1.5 text-xs font-semibold text-text-secondary">
+                            .{ext.toLowerCase()}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-[26px] border border-white/60 bg-white/70 p-5 shadow-[0_20px_50px_-32px_rgba(17,33,59,0.38)]">
+                      <div className="flex items-start gap-4">
+                        <div className="flex h-14 w-14 items-center justify-center rounded-[20px] gradient-primary text-white">
+                          <FileIcon className="h-7 w-7" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="truncate font-semibold text-text-primary">{selectedFile.name}</p>
+                              <p className="mt-1 text-sm text-text-secondary">
+                                {formatFileSize(selectedFile.size)} · staged for configuration
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setSelectedFile(null);
+                              }}
+                              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/72 text-text-secondary transition hover:text-text-primary"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+
+                          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                            {[
+                              { label: 'Schema preview', value: 'Ready' },
+                              { label: 'PII scan', value: 'Queued' },
+                              { label: 'Encryption', value: 'Active' },
+                            ].map((item) => (
+                              <div
+                                key={item.label}
+                                className="rounded-[18px] border border-white/55 bg-white/60 px-3 py-3"
+                              >
+                                <p className="text-xs uppercase tracking-[0.22em] text-text-tertiary">{item.label}</p>
+                                <p className="mt-2 text-sm font-semibold text-text-primary">{item.value}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-            <span className="text-xl font-bold text-text-primary">FairLens</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-text-tertiary">
-            <span className="text-primary-600 font-medium">1. Upload</span>
-            <span>→</span>
-            <span>2. Configure</span>
-            <span>→</span>
-            <span>3. Results</span>
-          </div>
-        </div>
-      </header>
 
-      <main className="max-w-2xl mx-auto px-6 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-3xl font-bold text-text-primary mb-2">Upload your dataset</h1>
-          <p className="text-text-secondary mb-8">
-            Drop a CSV, Excel spreadsheet, or ML model file. We'll auto-detect sensitive columns and scan for PII.
-          </p>
-
-          {/* Drop Zone */}
-          <Card padding="none" className="mb-6">
-            <div
-              {...getRootProps()}
-              className={`p-12 border-2 border-dashed rounded-xl text-center cursor-pointer transition-all duration-200 ${
-                isDragActive
-                  ? 'border-primary-400 bg-primary-50'
-                  : selectedFile
-                  ? 'border-success-300 bg-success-50'
-                  : 'border-border hover:border-primary-300 hover:bg-surface-tertiary'
-              }`}
-            >
-              <input {...getInputProps()} />
-
-              {selectedFile ? (
-                <div className="flex flex-col items-center gap-3">
-                  {(() => {
-                    const Icon = getFileIcon(selectedFile.name);
-                    return <Icon className="w-12 h-12 text-success-600" />;
-                  })()}
-                  <div>
-                    <p className="font-semibold text-text-primary">{selectedFile.name}</p>
-                    <p className="text-sm text-text-secondary">{formatFileSize(selectedFile.size)}</p>
-                  </div>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setSelectedFile(null); }}
-                    className="text-sm text-text-tertiary hover:text-critical-600 flex items-center gap-1"
+            <div className="border-t border-white/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.74),rgba(255,255,255,0.5))] p-6 sm:p-8 lg:border-l lg:border-t-0">
+              <Badge variant="neutral">Before you continue</Badge>
+              <div className="mt-5 space-y-4">
+                {[
+                  {
+                    icon: LockKeyhole,
+                    title: 'Encrypted staging',
+                    description: 'Uploads are represented as protected assets before the audit engine touches them.',
+                  },
+                  {
+                    icon: AlertTriangle,
+                    title: 'PII guardrails',
+                    description: 'FairLens flags direct identifiers so the team can redact or justify them early.',
+                  },
+                  {
+                    icon: Sparkles,
+                    title: 'AI-assisted setup',
+                    description: 'The next step pre-populates sensitive attributes and target columns to reduce friction.',
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-[24px] border border-white/55 bg-white/62 p-4 shadow-[0_18px_40px_-32px_rgba(17,33,59,0.36)]"
                   >
-                    <X className="w-4 h-4" /> Remove
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-16 h-16 rounded-2xl bg-primary-50 flex items-center justify-center">
-                    <UploadIcon className="w-8 h-8 text-primary-600" />
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-[18px] bg-primary-50 text-primary-600">
+                        <item.icon className="h-5 w-5" />
+                      </div>
+                      <p className="font-semibold text-text-primary">{item.title}</p>
+                    </div>
+                    <p className="mt-3 text-sm leading-7 text-text-secondary">{item.description}</p>
                   </div>
-                  <div>
-                    <p className="font-semibold text-text-primary">
-                      {isDragActive ? 'Drop your file here' : 'Drag & drop your file here'}
-                    </p>
-                    <p className="text-sm text-text-secondary mt-1">or click to browse</p>
-                  </div>
-                  <div className="flex flex-wrap justify-center gap-2 mt-2">
-                    {['CSV', 'XLSX', 'PKL', 'ONNX', 'JSON'].map((ext) => (
-                      <Badge key={ext} variant="neutral">.{ext.toLowerCase()}</Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
+                ))}
+              </div>
+
+              <div className="mt-5 rounded-[24px] border border-dashed border-white/60 bg-white/42 p-4">
+                <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Suggested payloads</p>
+                <p className="mt-2 text-sm text-text-secondary">
+                  Hiring outcomes, lending approvals, triage decisions, and feature importance exports all work well with this flow.
+                </p>
+              </div>
             </div>
-          </Card>
-
-          {/* Info cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <Card padding="sm" className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-warning-50 flex items-center justify-center flex-shrink-0">
-                <AlertTriangle className="w-4 h-4 text-warning-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-text-primary">PII Detection</p>
-                <p className="text-xs text-text-secondary">We automatically scan for emails, phone numbers, and Aadhaar patterns.</p>
-              </div>
-            </Card>
-            <Card padding="sm" className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
-                <Shield className="w-4 h-4 text-primary-600" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-text-primary">Encrypted Storage</p>
-                <p className="text-xs text-text-secondary">Files are encrypted with AES-256 at rest on Google Cloud Storage.</p>
-              </div>
-            </Card>
           </div>
+        </Card>
+      </motion.section>
 
-          {/* Upload Button */}
-          <div className="flex justify-end">
-            <Button
-              size="lg"
-              disabled={!selectedFile}
-              loading={uploading}
-              onClick={handleUpload}
-            >
-              Upload & Continue
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-          </div>
-        </motion.div>
-      </main>
-    </div>
+      <div className="flex justify-end">
+        <Button size="lg" disabled={!selectedFile} loading={uploading} onClick={handleUpload}>
+          Upload and Continue
+          <ArrowRight className="h-5 w-5" />
+        </Button>
+      </div>
+    </AppShell>
   );
 }
