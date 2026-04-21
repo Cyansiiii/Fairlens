@@ -73,12 +73,12 @@ export default function AppShell({
       </div>
 
       <div className="relative mx-auto max-w-[1480px] px-4 py-4 sm:px-6 lg:px-8 lg:py-8">
-        <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className="glass-panel glass-panel-strong rounded-[30px] p-4 sm:p-5 xl:sticky xl:top-6 xl:h-[calc(100vh-3rem)]">
+        <div className="grid gap-6 xl:items-start xl:grid-cols-[280px_minmax(0,1fr)]">
+          <aside className="glass-panel glass-panel-strong rounded-[30px] p-4 sm:p-5 xl:sticky xl:top-6 xl:self-start">
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="flex w-full items-center gap-3 rounded-[24px] border border-white/55 bg-white/55 px-3 py-3 text-left transition hover:bg-white/72"
+              className="button-secondary theme-surface-hover flex w-full items-center gap-3 rounded-[24px] px-3 py-3 text-left"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-[18px] gradient-primary shadow-[0_20px_50px_-22px_rgba(0,101,242,0.7)]">
                 <ShieldCheck className="h-6 w-6 text-white" />
@@ -103,16 +103,16 @@ export default function AppShell({
                       'group flex items-center justify-between rounded-[22px] px-4 py-3 text-sm font-semibold transition duration-200',
                       active
                         ? 'bg-[linear-gradient(135deg,rgba(0,101,242,0.14),rgba(18,179,168,0.14))] text-text-primary shadow-[0_18px_40px_-28px_rgba(17,33,59,0.45)]'
-                        : 'text-text-secondary hover:bg-white/58 hover:text-text-primary',
+                        : 'text-text-secondary hover:bg-white/58 hover:text-text-primary dark:hover:bg-slate-700/58',
                     )}
                   >
                     <span className="flex items-center gap-3">
                       <span
                         className={clsx(
-                          'flex h-10 w-10 items-center justify-center rounded-[16px] border transition',
+                          'flex h-10 w-10 items-center justify-center rounded-[16px] transition',
                           active
-                            ? 'border-white/60 bg-white/72 shadow-[0_14px_30px_-20px_rgba(0,101,242,0.5)]'
-                            : 'border-white/45 bg-white/46',
+                            ? 'theme-surface-strong shadow-[0_14px_30px_-20px_rgba(0,101,242,0.5)]'
+                            : 'theme-surface-muted',
                         )}
                       >
                         <item.icon className="h-[1.125rem] w-[1.125rem]" />
@@ -130,7 +130,7 @@ export default function AppShell({
               })}
             </div>
 
-            <div className="mt-6 rounded-[28px] border border-white/55 bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.52))] p-4 shadow-[0_28px_70px_-40px_rgba(17,33,59,0.42)]">
+            <div className="theme-surface-strong mt-6 rounded-[28px] p-4">
               <div className="flex items-center justify-between">
                 <Badge variant="accent">Live Workspace</Badge>
                 <span className="h-2.5 w-2.5 rounded-full bg-success-500 shadow-[0_0_0_6px_rgba(24,171,113,0.16)]" />
@@ -143,20 +143,24 @@ export default function AppShell({
                 Intake, scanning, mitigation, simulation, and certification all share a single orchestration layer.
               </p>
 
-              <div className="mt-5 grid grid-cols-2 gap-3">
-                <div className="rounded-[22px] border border-white/55 bg-white/60 p-3">
-                  <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Monitored</p>
-                  <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.05em] text-text-primary">
+              <div className="mt-5 grid auto-rows-fr grid-cols-2 gap-3">
+                <div className="theme-surface-soft flex min-h-[8.5rem] min-w-0 flex-col justify-between rounded-[22px] px-3.5 py-3.5">
+                  <p className="text-[0.68rem] uppercase leading-4 tracking-[0.18em] text-text-tertiary">Monitored</p>
+                  <p className="mt-3 font-display text-[1.95rem] leading-none font-semibold tracking-[-0.05em] text-text-primary">
                     16
                   </p>
-                  <p className="text-xs text-text-secondary">Protected attributes</p>
+                  <p className="mt-3 text-[0.78rem] leading-[1.05rem] text-text-secondary break-words">
+                    Protected attributes
+                  </p>
                 </div>
-                <div className="rounded-[22px] border border-white/55 bg-white/60 p-3">
-                  <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Mapped</p>
-                  <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.05em] text-text-primary">
+                <div className="theme-surface-soft flex min-h-[8.5rem] min-w-0 flex-col justify-between rounded-[22px] px-3.5 py-3.5">
+                  <p className="text-[0.68rem] uppercase leading-4 tracking-[0.18em] text-text-tertiary">Mapped</p>
+                  <p className="mt-3 font-display text-[1.95rem] leading-none font-semibold tracking-[-0.05em] text-text-primary">
                     4
                   </p>
-                  <p className="text-xs text-text-secondary">Regulatory playbooks</p>
+                  <p className="mt-3 text-[0.78rem] leading-[1.05rem] text-text-secondary break-words">
+                    Regulatory playbooks
+                  </p>
                 </div>
               </div>
 
@@ -169,7 +173,7 @@ export default function AppShell({
               </Button>
             </div>
 
-            <div className="mt-6 rounded-[24px] border border-dashed border-white/55 bg-white/42 p-4">
+            <div className="theme-surface-dashed mt-6 rounded-[24px] p-4">
               <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Promise Layer</p>
               <p className="mt-2 text-sm font-semibold text-text-primary">
                 Explainable, certifiable, and tuned for Global South contexts.

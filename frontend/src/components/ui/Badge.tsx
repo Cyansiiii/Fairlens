@@ -30,7 +30,7 @@ export default function Badge({ children, variant = 'default', severity, size = 
           'border-warning-100/70 bg-warning-50/88 text-warning-700': resolvedVariant === 'warning',
           'border-critical-100/70 bg-critical-50/88 text-critical-700': resolvedVariant === 'critical',
           'border-accent-100/70 bg-accent-50/82 text-accent-700': resolvedVariant === 'accent',
-          'border-white/55 bg-white/62 text-text-secondary': resolvedVariant === 'neutral',
+          'theme-surface-soft text-text-secondary': resolvedVariant === 'neutral',
         },
       )}
     >

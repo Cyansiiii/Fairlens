@@ -66,10 +66,7 @@ export default function FixWorkspace() {
           </h2>
           <div className="mt-6 space-y-3">
             {interventions.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[26px] border border-white/55 bg-white/62 p-5 shadow-[0_20px_48px_-34px_rgba(17,33,59,0.38)]"
-              >
+              <div key={item.title} className="theme-surface rounded-[26px] p-5">
                 <div className="flex items-center justify-between gap-4">
                   <p className="font-semibold text-text-primary">{item.title}</p>
                   <Badge variant="success">{item.projected}</Badge>
@@ -106,7 +103,7 @@ export default function FixWorkspace() {
               <ShieldCheck className="h-5 w-5 text-success-600" />
             </div>
             <p className="mt-4 text-sm leading-7 text-text-secondary">
-              This screen now looks like a serious remediation studio rather than a placeholder message. It gives the user a stronger mental model for what “fixing bias” means in the product.
+              This screen now looks like a serious remediation studio rather than a placeholder message. It gives the user a stronger mental model for what "fixing bias" means in the product.
             </p>
           </Card>
         </div>

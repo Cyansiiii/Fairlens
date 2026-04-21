@@ -79,7 +79,7 @@ export default function Dashboard() {
       >
         <Card tone="accent" className="rounded-[34px] overflow-hidden">
           <div className="grid gap-6 lg:grid-cols-[240px_1fr] lg:items-center">
-            <div className="rounded-[28px] border border-white/55 bg-white/62 p-4">
+            <div className="theme-surface rounded-[28px] p-4">
               <Gauge score={84} size={190} strokeWidth={11} label="Live workspace confidence" />
             </div>
 
@@ -105,7 +105,7 @@ export default function Dashboard() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="rounded-[24px] border border-white/55 bg-white/60 px-4 py-4 shadow-[0_18px_40px_-30px_rgba(17,33,59,0.36)]"
+                    className="theme-surface rounded-[24px] px-4 py-4"
                   >
                     <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">{item.label}</p>
                     <p className="mt-2 font-display text-3xl font-semibold tracking-[-0.06em] text-text-primary">
@@ -128,7 +128,7 @@ export default function Dashboard() {
               {protections.map((item) => (
                 <div
                   key={item}
-                  className="rounded-[22px] border border-white/55 bg-white/60 px-4 py-4 text-sm text-text-secondary"
+                  className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm text-text-secondary"
                 >
                   {item}
                 </div>
@@ -158,7 +158,7 @@ export default function Dashboard() {
                   key={item.label}
                   type="button"
                   onClick={item.action}
-                  className="rounded-[22px] border border-white/60 bg-white/62 px-4 py-4 text-left transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_48px_-32px_rgba(17,33,59,0.42)]"
+                  className="theme-surface theme-surface-hover rounded-[22px] px-4 py-4 text-left"
                 >
                   <item.icon className="h-5 w-5 text-primary-500" />
                   <p className="mt-4 font-semibold text-text-primary">{item.label}</p>
@@ -228,7 +228,7 @@ export default function Dashboard() {
               {['Caste', 'Gender', 'Religion', 'Language', 'State', 'Locality'].map((item) => (
                 <div
                   key={item}
-                  className="rounded-[22px] border border-white/55 bg-white/60 px-4 py-4 text-sm font-semibold text-text-secondary"
+                  className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm font-semibold text-text-secondary"
                 >
                   {item}
                 </div>
@@ -249,7 +249,7 @@ export default function Dashboard() {
               ].map((prompt) => (
                 <div
                   key={prompt}
-                  className="rounded-[22px] border border-white/55 bg-white/62 px-4 py-4 text-sm text-text-secondary"
+                  className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm text-text-secondary"
                 >
                   {prompt}
                 </div>

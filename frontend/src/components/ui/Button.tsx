@@ -14,17 +14,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={clsx(
-          'group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-transparent font-semibold tracking-[-0.02em] transition duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-not-allowed disabled:opacity-50',
+          'group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-transparent font-semibold tracking-[-0.02em] transform-gpu transition-[transform,box-shadow,filter,color,border-color] duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] disabled:cursor-not-allowed disabled:opacity-50',
           {
-            'bg-[var(--gradient-brand)] text-white shadow-[0_22px_50px_-22px_rgba(0,101,242,0.82)] hover:-translate-y-0.5 hover:shadow-[0_28px_70px_-24px_rgba(0,101,242,0.82)] focus-visible:ring-primary-400':
+            'button-primary text-white focus-visible:ring-primary-400':
               variant === 'primary',
-            'glass-panel glass-panel-strong text-text-primary shadow-[0_22px_50px_-30px_rgba(17,33,59,0.45)] hover:-translate-y-0.5 hover:shadow-[0_28px_70px_-30px_rgba(17,33,59,0.48)] focus-visible:ring-primary-300':
+            'button-secondary text-text-primary focus-visible:ring-primary-300':
               variant === 'secondary',
-            'border-white/20 bg-white/18 text-text-secondary backdrop-blur-xl hover:border-white/35 hover:bg-white/28 hover:text-text-primary focus-visible:ring-primary-300':
+            'button-ghost text-text-secondary focus-visible:ring-primary-300':
               variant === 'ghost',
-            'bg-[var(--gradient-signal)] text-white shadow-[0_22px_50px_-22px_rgba(246,95,67,0.7)] hover:-translate-y-0.5 hover:shadow-[0_28px_70px_-24px_rgba(246,95,67,0.78)] focus-visible:ring-critical-300':
+            'button-danger text-white focus-visible:ring-critical-300':
               variant === 'danger',
-            'bg-[linear-gradient(135deg,var(--color-accent-500),#67e2d0)] text-white shadow-[0_22px_50px_-22px_rgba(18,179,168,0.7)] hover:-translate-y-0.5 hover:shadow-[0_28px_70px_-24px_rgba(18,179,168,0.78)] focus-visible:ring-accent-300':
+            'button-accent text-white focus-visible:ring-accent-300':
               variant === 'accent',
           },
           {
@@ -36,8 +36,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
-        <span className="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100">
-          <span className="absolute inset-y-[-120%] left-[-25%] w-[38%] rotate-[16deg] bg-[linear-gradient(135deg,transparent,rgba(255,255,255,0.55),transparent)] transition duration-700 group-hover:left-[110%]" />
+        <span className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100">
+          <span className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_58%)] opacity-0 transition duration-300 group-hover:opacity-100" />
+          <span className="absolute inset-y-[-150%] left-[-34%] w-[40%] rotate-[16deg] bg-[linear-gradient(135deg,transparent,rgba(255,255,255,0.55),transparent)] blur-[1px] transition-[left] duration-700 ease-out group-hover:left-[118%]" />
         </span>
         <span className="relative z-10 inline-flex items-center justify-center gap-2">
           {loading && (

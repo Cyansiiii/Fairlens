@@ -53,10 +53,7 @@ export default function SimulationStudio() {
               'Inject proxy-heavy feature bundles to surface indirect discrimination.',
               'Stress score thresholds against alternative market or regional mixes.',
             ].map((item) => (
-              <div
-                key={item}
-                className="rounded-[24px] border border-white/55 bg-white/62 px-4 py-4 text-sm text-text-secondary"
-              >
+              <div key={item} className="theme-surface-soft rounded-[24px] px-4 py-4 text-sm text-text-secondary">
                 {item}
               </div>
             ))}
@@ -117,7 +114,7 @@ export default function SimulationStudio() {
           {['Representation shocks', 'Proxy drift', 'Threshold sweep'].map((item) => (
             <div
               key={item}
-              className="rounded-[22px] border border-white/55 bg-white/60 px-4 py-4 text-sm font-semibold text-text-secondary"
+              className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm font-semibold text-text-secondary"
             >
               <Radar className="mb-3 h-5 w-5 text-primary-500" />
               {item}

@@ -65,7 +65,7 @@ export default function ScanResults() {
 
   return (
     <AppShell
-      eyebrow="Scan Results · Step 3 of 3"
+      eyebrow="Scan Results - Step 3 of 3"
       title="The audit results now read like an executive control room."
       description="This redesigned results surface prioritizes clarity: how risky the model is, why it failed, and which action should happen next."
       actions={(
@@ -87,9 +87,9 @@ export default function ScanResults() {
         transition={{ duration: 0.6 }}
         className="grid gap-6 2xl:grid-cols-[1.06fr_0.94fr]"
       >
-        <Card tone="danger" className="rounded-[34px] overflow-hidden">
+        <Card tone="danger" className="overflow-hidden rounded-[34px]">
           <div className="grid gap-6 lg:grid-cols-[240px_1fr] lg:items-center">
-            <div className="rounded-[28px] border border-white/60 bg-white/64 p-4">
+            <div className="theme-surface rounded-[28px] p-4">
               <Gauge score={mockResults.fairScore} size={190} strokeWidth={11} label="Current FairScore" />
             </div>
             <div>
@@ -113,10 +113,7 @@ export default function ScanResults() {
                   { label: 'Critical flags', value: mockResults.summary.criticalFlags },
                   { label: 'High flags', value: mockResults.summary.highFlags },
                 ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="rounded-[22px] border border-white/55 bg-white/62 px-4 py-4 shadow-[0_18px_40px_-32px_rgba(17,33,59,0.36)]"
-                  >
+                  <div key={item.label} className="theme-surface rounded-[22px] px-4 py-4">
                     <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">{item.label}</p>
                     <p className="mt-2 font-display text-3xl font-semibold tracking-[-0.06em] text-text-primary">
                       {item.value}
@@ -140,10 +137,7 @@ export default function ScanResults() {
                 'Proxy-heavy name and locality features are amplifying the disparity.',
                 'Mitigation and representation balancing are likely to recover the score into the 80s.',
               ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[22px] border border-white/55 bg-white/60 px-4 py-4 text-sm text-text-secondary"
-                >
+                <div key={item} className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm text-text-secondary">
                   {item}
                 </div>
               ))}
@@ -193,10 +187,7 @@ export default function ScanResults() {
               const passed = metric.passed;
 
               return (
-                <div
-                  key={metric.metricName}
-                  className="rounded-[28px] border border-white/55 bg-white/62 p-5 shadow-[0_22px_52px_-34px_rgba(17,33,59,0.38)]"
-                >
+                <div key={metric.metricName} className="theme-surface rounded-[28px] p-5">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                     <div
                       className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[18px] ${
@@ -219,7 +210,7 @@ export default function ScanResults() {
                         ))}
                       </div>
                     </div>
-                    <div className="rounded-[18px] border border-white/55 bg-white/65 px-4 py-3 text-right">
+                    <div className="theme-surface-soft rounded-[18px] px-4 py-3 text-right">
                       <p className="text-xs uppercase tracking-[0.22em] text-text-tertiary">Observed</p>
                       <p className="mt-2 font-display text-2xl font-semibold tracking-[-0.06em] text-text-primary">
                         {metric.value}
@@ -260,7 +251,7 @@ export default function ScanResults() {
                   key={item.label}
                   type="button"
                   onClick={item.action}
-                  className="rounded-[24px] border border-white/60 bg-white/62 px-4 py-4 text-left transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_48px_-32px_rgba(17,33,59,0.42)]"
+                  className="theme-surface theme-surface-hover rounded-[24px] px-4 py-4 text-left"
                 >
                   <div className="flex items-center justify-between">
                     <item.icon className="h-5 w-5 text-primary-500" />

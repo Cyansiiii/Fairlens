@@ -1,6 +1,64 @@
 import { create } from 'zustand';
 import type { AuditResponse, ScanResultsResponse, UploadResponse, User } from '../types';
 
+type Theme = 'light' | 'dark';
+
+const THEME_STORAGE_KEY = 'fairlens_theme';
+const DEFAULT_THEME: Theme = 'light';
+
+const getStoredTheme = (): Theme => {
+  if (typeof window === 'undefined') {
+    return DEFAULT_THEME;
+  }
+
+  return window.localStorage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : DEFAULT_THEME;
+};
+
+const applyTheme = (theme: Theme) => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  document.documentElement.classList.toggle('dark', theme === 'dark');
+  document.documentElement.style.colorScheme = theme;
+};
+
+const initialTheme = getStoredTheme();
+applyTheme(initialTheme);
+
+interface ThemeState {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+  initializeTheme: () => void;
+}
+
+export const useThemeStore = create<ThemeState>((set) => ({
+  theme: initialTheme,
+  setTheme: (theme) => {
+    applyTheme(theme);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    }
+    set({ theme });
+  },
+  toggleTheme: () =>
+    set((state) => {
+      const nextTheme = state.theme === 'light' ? 'dark' : 'light';
+      applyTheme(nextTheme);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+      }
+
+      return { theme: nextTheme };
+    }),
+  initializeTheme: () => {
+    const theme = getStoredTheme();
+    applyTheme(theme);
+    set({ theme });
+  },
+}));
+
 // User Store
 interface UserState {
   user: User | null;

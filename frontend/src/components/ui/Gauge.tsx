@@ -21,7 +21,7 @@ export default function Gauge({ score, size = 200, strokeWidth = 12, label = 'Fa
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="relative" style={{ width: size, height: size }}>
-        <div className="absolute inset-[16%] rounded-full border border-white/60 bg-white/58 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_30px_50px_-36px_rgba(17,33,59,0.5)] backdrop-blur-xl" />
+        <div className="theme-surface-soft absolute inset-[16%] rounded-full backdrop-blur-xl" />
         <svg width={size} height={size} className="-rotate-90 overflow-visible">
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -73,7 +73,7 @@ export default function Gauge({ score, size = 200, strokeWidth = 12, label = 'Fa
           </motion.span>
           {showGrade && (
             <motion.span
-              className="rounded-full border border-white/55 bg-white/62 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-text-secondary"
+              className="theme-surface-soft rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-text-secondary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}

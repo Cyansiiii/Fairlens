@@ -78,7 +78,7 @@ export default function ConfigurePage() {
 
   return (
     <AppShell
-      eyebrow="New Audit · Step 2 of 3"
+      eyebrow="New Audit - Step 2 of 3"
       title="Shape the audit before the engine runs."
       description="Configuration now feels like a curated control panel: protected attributes, target signals, and compliance posture are staged in one premium review surface."
       actions={(
@@ -123,7 +123,7 @@ export default function ConfigurePage() {
                     className={clsx(
                       'rounded-full px-4 py-2.5 text-sm font-semibold capitalize transition duration-200',
                       active
-                        ? 'bg-[var(--gradient-brand)] text-white shadow-[0_18px_42px_-22px_rgba(0,101,242,0.78)]'
+                        ? 'button-primary text-white shadow-[0_18px_42px_-22px_rgba(0,101,242,0.78)]'
                         : 'glass-chip text-text-secondary hover:-translate-y-0.5 hover:text-text-primary',
                     )}
                   >
@@ -143,7 +143,7 @@ export default function ConfigurePage() {
               Define the outcome column the model influences.
             </h2>
             <p className="mt-3 text-sm leading-7 text-text-secondary">
-              Use the decision, approval, risk, or routing field that captures the model’s real-world outcome. FairLens will align the scorecards and explanations around it.
+              Use the decision, approval, risk, or routing field that captures the model&apos;s real-world outcome. FairLens will align the scorecards and explanations around it.
             </p>
             <div className="mt-6">
               <input
@@ -171,7 +171,7 @@ export default function ConfigurePage() {
                     'rounded-[26px] border px-4 py-4 text-left transition duration-200',
                     framework === item.value
                       ? 'border-primary-100 bg-[linear-gradient(135deg,rgba(0,101,242,0.12),rgba(18,179,168,0.12))] shadow-[0_20px_48px_-30px_rgba(0,101,242,0.42)]'
-                      : 'border-white/55 bg-white/58 hover:-translate-y-1 hover:shadow-[0_22px_50px_-32px_rgba(17,33,59,0.36)]',
+                      : 'theme-surface-muted theme-surface-hover',
                   )}
                 >
                   <p className="font-semibold text-text-primary">{item.label}</p>
@@ -197,10 +197,7 @@ export default function ConfigurePage() {
                 `Treat "${targetColumn}" as the decisive model outcome column.`,
                 `Attach ${framework.split('_').join(' ')} narrative mapping to the certificate draft.`,
               ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[22px] border border-white/55 bg-white/62 px-4 py-4 text-sm text-text-secondary"
-                >
+                <div key={item} className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm text-text-secondary">
                   {item}
                 </div>
               ))}

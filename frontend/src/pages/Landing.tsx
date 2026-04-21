@@ -15,6 +15,7 @@ import {
 
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
+import ThemeToggle from '../components/ui/ThemeToggle';
 
 const heroStats = [
   { value: '8', label: 'fairness metrics wired into every audit' },
@@ -82,7 +83,7 @@ function LandingPanel({
 
 function TinyLogo() {
   return (
-    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/75 bg-white/78 shadow-[0_18px_40px_-28px_rgba(28,38,71,0.3)]">
+    <div className="theme-surface-strong flex h-11 w-11 items-center justify-center rounded-full shadow-[0_18px_40px_-28px_rgba(28,38,71,0.3)]">
       <div className="relative h-5 w-5">
         <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full border border-text-primary" />
         <span className="absolute bottom-0 left-0 h-2 w-2 rounded-full border border-text-primary" />
@@ -96,9 +97,9 @@ function TinyLogo() {
 function HeroMockup() {
   return (
     <div className="relative mx-auto h-[25rem] w-full max-w-[44rem] sm:h-[32rem]">
-      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/45 sm:h-[28rem] sm:w-[28rem]" />
-      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[16rem] w-[16rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/55 sm:h-[22rem] sm:w-[22rem]" />
-      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[10rem] w-[10rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/65 sm:h-[16rem] sm:w-[16rem]" />
+      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/45 dark:border-slate-600/45 sm:h-[28rem] sm:w-[28rem]" />
+      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[16rem] w-[16rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/55 dark:border-slate-600/55 sm:h-[22rem] sm:w-[22rem]" />
+      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[10rem] w-[10rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/65 dark:border-slate-600/65 sm:h-[16rem] sm:w-[16rem]" />
 
       <motion.div whileHover={{ scale: 1.05 }} className="landing-card absolute left-1/2 top-[50%] w-[85%] sm:w-[66%] -translate-x-1/2 -translate-y-1/2 rounded-[30px] p-3 sm:p-4 shadow-xl">
         <div className="flex items-center justify-between px-2 py-1 text-[0.72rem] text-text-tertiary">
@@ -111,7 +112,7 @@ function HeroMockup() {
         <div className="mt-3 overflow-hidden rounded-[24px] bg-[linear-gradient(180deg,#cde6ff_0%,#cfe0ff_28%,#b8b7ff_62%,#beb7f4_100%)]">
           <div className="h-[12rem] sm:h-[15rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.85),transparent_48%),linear-gradient(180deg,rgba(255,255,255,0.22),transparent)]" />
         </div>
-        <div className="mt-3 flex items-center justify-between rounded-[22px] bg-white/80 px-4 py-3">
+        <div className="theme-surface-soft mt-3 flex items-center justify-between rounded-[22px] px-4 py-3">
           <div>
             <p className="text-[0.65rem] uppercase tracking-[0.22em] text-text-tertiary">Report summary</p>
             <p className="mt-1 text-sm font-semibold text-text-primary">Recoverable to 89</p>
@@ -133,7 +134,7 @@ function HeroMockup() {
         <p className="mt-2 text-3xl font-semibold tracking-[-0.06em] text-text-primary">72</p>
       </motion.div>
 
-      <motion.div whileHover={{ y: -5, scale: 1.02 }} className="absolute bottom-[7%] left-1/2 flex w-[85%] sm:w-[72%] -translate-x-1/2 items-center justify-between rounded-full border border-white/75 bg-white/84 px-5 py-3 shadow-[0_24px_56px_-36px_rgba(28,38,71,0.28)]">
+      <motion.div whileHover={{ y: -5, scale: 1.02 }} className="theme-surface-strong absolute bottom-[2%] left-1/2 flex w-[85%] sm:bottom-[3%] sm:w-[72%] -translate-x-1/2 items-center justify-between rounded-full px-5 py-3 shadow-[0_24px_56px_-36px_rgba(28,38,71,0.28)]">
         <span className="text-sm font-medium text-text-primary">Explain findings in plain language</span>
         <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-500 text-white">
           <Sparkles className="h-4 w-4" />
@@ -150,8 +151,8 @@ function HeroMockup() {
 function TeamVisual() {
   return (
     <div className="relative min-h-[26rem]">
-      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[20rem] w-[20rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50" />
-      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[15rem] w-[15rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/60" />
+      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[20rem] w-[20rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50 dark:border-slate-600/50" />
+      <div className="pointer-events-none absolute left-1/2 top-[58%] h-[15rem] w-[15rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/60 dark:border-slate-600/60" />
       <motion.div whileHover={{ y: -5 }} className="absolute left-[8%] top-[10%] landing-card shadow-lg rounded-full px-4 py-3 text-sm font-medium text-text-primary">
         Like posts by your representatives
       </motion.div>
@@ -164,8 +165,8 @@ function TeamVisual() {
       <motion.div whileHover={{ y: -5 }} className="absolute bottom-[12%] left-[48%] landing-card shadow-lg rounded-full px-4 py-3 text-sm font-medium text-text-primary z-10">
         Fair reviews increase adoption
       </motion.div>
-      <div className="absolute left-1/2 top-[58%] w-[68%] sm:w-[58%] -translate-x-1/2 -translate-y-1/2 rotate-[-18deg] rounded-[34px] border border-white/75 bg-[linear-gradient(180deg,#eff4ff_0%,#d4dcff_58%,#d6cdf8_100%)] p-3 shadow-[0_36px_80px_-46px_rgba(31,42,83,0.34)]">
-        <div className="h-[18rem] rounded-[28px] border border-white/70 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.9),rgba(184,200,255,0.46)_52%,rgba(135,142,255,0.18)_100%)]" />
+      <div className="absolute left-1/2 top-[58%] w-[68%] sm:w-[58%] -translate-x-1/2 -translate-y-1/2 rotate-[-18deg] rounded-[34px] border border-white/75 bg-[linear-gradient(180deg,#eff4ff_0%,#d4dcff_58%,#d6cdf8_100%)] p-3 shadow-[0_36px_80px_-46px_rgba(31,42,83,0.34)] dark:border-slate-600/70 dark:bg-[linear-gradient(180deg,rgba(30,41,59,0.9),rgba(51,65,85,0.76))]">
+        <div className="h-[18rem] rounded-[28px] border border-white/70 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.9),rgba(184,200,255,0.46)_52%,rgba(135,142,255,0.18)_100%)] dark:border-slate-600/65 dark:bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.22),rgba(30,41,59,0.74)_52%,rgba(15,23,42,0.92)_100%)]" />
       </div>
     </div>
   );
@@ -173,8 +174,8 @@ function TeamVisual() {
 
 function CopilotVisual() {
   return (
-    <div className="relative min-h-[28rem] mt-6 lg:mt-0">
-      <motion.div whileHover={{ scale: 1.02 }} className="landing-card absolute left-[2%] sm:left-[8%] top-[4%] w-[80%] sm:w-[52%] rounded-[28px] p-4 shadow-xl z-10">
+    <div className="relative mt-6 min-h-[40rem] sm:min-h-[46rem] lg:mt-0 lg:min-h-[36rem] xl:min-h-[38rem]">
+      <motion.div whileHover={{ scale: 1.02 }} className="landing-card absolute left-[2%] top-[4%] hidden w-[80%] rounded-[28px] p-4 shadow-xl z-10 sm:left-[8%] sm:block sm:w-[52%]">
         <div className="flex items-center justify-between text-xs text-text-tertiary">
           <div className="flex gap-1">
             <span className="h-2.5 w-2.5 rounded-full bg-white" />
@@ -193,7 +194,7 @@ function CopilotVisual() {
         </div>
       </motion.div>
 
-      <motion.div whileHover={{ scale: 1.02 }} className="landing-card absolute right-[2%] sm:right-0 top-[28%] sm:top-[20%] w-[90%] sm:w-[50%] rounded-[28px] p-5 shadow-2xl z-20">
+      <motion.div whileHover={{ scale: 1.02 }} className="landing-card absolute left-1/2 top-[4%] z-20 w-[94%] -translate-x-1/2 rounded-[28px] p-4 shadow-2xl sm:left-auto sm:right-[4%] sm:top-[16%] sm:w-[50%] sm:translate-x-0 sm:p-5 lg:right-0 lg:top-[9%] lg:w-[48%] lg:p-4 xl:top-[10%] xl:w-[46%]">
         <div className="flex items-center gap-3">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-500 text-white">Z</span>
           <div>
@@ -201,19 +202,66 @@ function CopilotVisual() {
             <p className="text-sm text-text-secondary leading-tight mt-0.5">How are we doing on fairness this week?</p>
           </div>
         </div>
-        <div className="mt-4 rounded-[18px] bg-[#121521] px-4 py-4 text-sm text-white">
+        <div className="theme-surface-inverse mt-3 rounded-[16px] px-4 py-3 text-sm text-white sm:mt-4 sm:rounded-[18px] sm:py-4 lg:mt-3 lg:py-3">
           <p className="text-white/80">45 new findings</p>
           <p className="mt-2 font-semibold">AI summarized the highest-risk subgroup gaps this week.</p>
         </div>
-        <div className="mt-4 rounded-[18px] bg-white/72 px-4 py-4">
-          <div className="h-24 rounded-[14px] bg-[linear-gradient(90deg,#e7ebf6_0_10%,transparent_10_20%,#d8dce8_20_30%,transparent_30_40%,#c7d9ff_40_50%,transparent_50_60%,#d8dce8_60_70%,transparent_70_80%,#c6cff0_80_90%,transparent_90_100%)]" />
+        <div className="theme-surface mt-3 rounded-[18px] p-3 sm:mt-4 sm:rounded-[20px] sm:p-4 lg:mt-3 lg:p-3">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[0.58rem] uppercase tracking-[0.18em] text-text-tertiary sm:text-[0.65rem] sm:tracking-[0.22em]">Fairness pulse</p>
+              <p className="mt-1 text-[0.95rem] font-semibold leading-6 text-text-primary sm:text-sm lg:leading-5">The riskiest signals are now readable.</p>
+            </div>
+            <span className="rounded-full bg-accent-50 px-3 py-1 text-[0.68rem] font-semibold text-accent-700 dark:bg-accent-500/14 dark:text-accent-200">
+              Recoverable
+            </span>
+          </div>
+
+          <div className="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3 lg:space-y-2">
+            {[
+              {
+                label: 'Hiring parity drift',
+                value: '0.62',
+                width: '78%',
+                tone: 'from-critical-400 to-warning-300',
+              },
+              {
+                label: 'Proxy signal risk',
+                value: 'High',
+                width: '88%',
+                tone: 'from-primary-500 to-accent-400',
+              },
+              {
+                label: 'Recoverable score',
+                value: '89',
+                width: '64%',
+                tone: 'from-accent-500 to-success-400',
+              },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-[14px] bg-white/72 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.74)] dark:bg-slate-800/68 sm:rounded-[16px] sm:py-3 lg:py-2"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-[0.72rem] font-semibold text-text-primary sm:text-xs">{item.label}</p>
+                  <p className="text-[0.72rem] font-semibold text-text-secondary sm:text-xs">{item.value}</p>
+                </div>
+                <div className="mt-2 h-1.5 rounded-full bg-slate-200/72 dark:bg-slate-700/72 sm:h-2 lg:mt-1.5">
+                  <div
+                    className={`h-full rounded-full bg-gradient-to-r ${item.tone}`}
+                    style={{ width: item.width }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </motion.div>
 
-      <motion.div whileHover={{ y: -5 }} className="landing-card absolute bottom-[2%] sm:bottom-[7%] left-[6%] rounded-[22px] px-4 py-3 text-sm text-text-primary shadow-lg z-30">
+      <motion.div whileHover={{ y: -5 }} className="landing-card absolute bottom-[4%] left-[5%] hidden rounded-[22px] px-4 py-3 text-sm text-text-primary shadow-lg z-30 sm:bottom-[4%] sm:left-[6%] sm:block">
         Answered to 12 private messages!
       </motion.div>
-      <motion.div whileHover={{ scale: 1.02 }} className="landing-card absolute bottom-[10%] sm:bottom-[14%] right-[4%] sm:left-[48%] w-[85%] sm:w-[48%] rounded-[24px] overflow-hidden p-0 shadow-xl z-10">
+      <motion.div whileHover={{ scale: 1.02 }} className="landing-card absolute bottom-[16%] left-[5%] z-30 hidden w-[60%] rounded-[24px] overflow-hidden p-0 shadow-xl sm:bottom-[11%] sm:left-[6%] sm:block sm:w-[34%]">
         <div className="h-32 sm:h-44 bg-[linear-gradient(180deg,#dadada_0%,#f0d2e8_38%,#b8dfff_74%,#f3f5fb_100%)]" />
         <div className="px-4 py-3 sm:py-4">
           <div className="flex items-center justify-between">
@@ -221,7 +269,9 @@ function CopilotVisual() {
               <p className="font-semibold text-text-primary truncate">Ben Timona</p>
               <p className="text-sm text-text-secondary truncate">I want to ask you a question...</p>
             </div>
-            <button className="shrink-0 rounded-full bg-primary-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-primary-600">Answer</button>
+            <button className="button-primary shrink-0 rounded-full px-4 py-2 text-sm font-medium text-white transition">
+              Answer
+            </button>
           </div>
         </div>
       </motion.div>
@@ -232,11 +282,11 @@ function CopilotVisual() {
 function PricingVisual() {
   return (
     <div className="relative min-h-[30rem]">
-      <div className="absolute left-1/2 top-[12%] -translate-x-1/2 rounded-full border border-white/75 bg-white/84 px-5 py-3 text-sm font-medium text-text-primary shadow-[0_18px_44px_-32px_rgba(28,38,71,0.28)]">
+      <div className="theme-surface-strong absolute left-1/2 top-[6%] z-30 -translate-x-1/2 rounded-full px-5 py-3 text-sm font-medium text-text-primary shadow-[0_18px_44px_-32px_rgba(28,38,71,0.28)]">
         Monthly / Yearly
       </div>
-      <div className="pointer-events-none absolute left-1/2 top-[56%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50" />
-      <div className="grid gap-6 pt-16 md:grid-cols-2">
+      <div className="pointer-events-none absolute left-1/2 top-[56%] h-[22rem] w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/50 dark:border-slate-600/50" />
+      <div className="grid gap-6 pt-24 md:grid-cols-2">
         {pricingPlans.map((plan, index) => (
           <motion.div
             whileHover={{ y: -8 }}
@@ -244,8 +294,8 @@ function PricingVisual() {
             className={clsx(
               'landing-card relative flex flex-col justify-between rounded-[30px] p-6 sm:p-8 shadow-lg',
               index === 0
-                ? 'bg-[linear-gradient(180deg,rgba(233,234,255,0.84),rgba(209,232,255,0.72))]'
-                : 'bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,250,255,0.68))] border border-white/80',
+                ? 'bg-[linear-gradient(180deg,rgba(233,234,255,0.84),rgba(209,232,255,0.72))] dark:bg-[linear-gradient(180deg,rgba(37,99,235,0.2),rgba(18,179,168,0.14))]'
+                : 'theme-surface-strong',
             )}
           >
             <div>
@@ -259,7 +309,7 @@ function PricingVisual() {
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center justify-between text-sm font-medium text-text-secondary">
                     <span className="flex items-center gap-3">
-                      <span className="soft-outline-ring flex h-6 w-6 items-center justify-center rounded-full bg-white/60">
+                      <span className="theme-surface-soft soft-outline-ring flex h-6 w-6 items-center justify-center rounded-full">
                         <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />
                       </span>
                       {feature}
@@ -272,7 +322,7 @@ function PricingVisual() {
             <motion.button 
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              className="absolute bottom-[-1.6rem] left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-[#222748] text-white shadow-[0_18px_44px_-24px_rgba(34,39,72,0.68)] transition-colors hover:bg-[#2c335f]"
+              className="theme-surface-inverse absolute bottom-[-1.6rem] left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full text-white transition-colors hover:brightness-110"
             >
               <ArrowUpRight className="h-6 w-6" />
             </motion.button>
@@ -285,11 +335,11 @@ function PricingVisual() {
 
 function SandboxVisual() {
   return (
-    <div className="relative min-h-[31rem] pt-8">
+    <div className="relative min-h-[35rem] pt-8 sm:min-h-[31rem]">
       <motion.div whileHover={{ scale: 1.02 }} className="landing-card absolute left-[2%] sm:left-[7%] top-[5%] sm:top-[22%] w-[96%] sm:w-[85%] rounded-[30px] p-0 overflow-hidden shadow-xl z-20">
         <div className="flex flex-col sm:flex-row">
-          <div className="border-b sm:border-b-0 sm:border-r border-white/70 bg-[linear-gradient(180deg,rgba(232,236,255,0.8),rgba(243,246,255,0.68))] p-6 sm:w-[40%]">
-            <button className="flex w-full items-center justify-center gap-3 rounded-full bg-[#2a2f5a] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#343b71]">
+          <div className="border-b border-[var(--surface-card-border-strong)] bg-[linear-gradient(180deg,rgba(232,236,255,0.8),rgba(243,246,255,0.68))] p-6 sm:w-[40%] sm:border-b-0 sm:border-r dark:bg-[linear-gradient(180deg,rgba(30,41,59,0.88),rgba(15,23,42,0.72))]">
+            <button className="theme-surface-inverse flex w-full items-center justify-center gap-3 rounded-full px-6 py-3 text-sm font-medium text-white transition hover:brightness-110">
               <span className="text-lg">+</span>
               Add New Task
             </button>
@@ -303,7 +353,7 @@ function SandboxVisual() {
             </div>
           </div>
           <div className="p-5 sm:p-6 sm:w-[60%]">
-            <div className="rounded-full border border-slate-200/90 bg-white px-4 py-3 text-sm text-text-tertiary">
+            <div className="theme-surface-soft rounded-full px-4 py-3 text-sm text-text-tertiary">
               Type to search
             </div>
             <div className="mt-5 space-y-5">
@@ -343,7 +393,7 @@ function SandboxVisual() {
         <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Review note</p>
         <p className="mt-2 text-xs sm:text-sm text-text-secondary">All audits run in secure cloud sandboxes with isolated execution.</p>
       </motion.div>
-      <motion.div whileHover={{ y: -5 }} className="landing-card absolute right-[2%] sm:right-[4%] bottom-[-10%] sm:bottom-[10%] w-[14rem] sm:w-[15rem] rounded-[24px] px-4 py-4 shadow-lg z-10">
+      <motion.div whileHover={{ y: -5 }} className="landing-card absolute right-[2%] bottom-[18%] z-20 w-[14rem] rounded-[24px] px-4 py-4 shadow-lg sm:right-[4%] sm:bottom-[10%] sm:w-[15rem]">
         <p className="text-xs sm:text-sm text-text-secondary">
           Monitoring the feed and liking what the behavior type says should be liked.
         </p>
@@ -377,10 +427,11 @@ export default function Landing() {
               </div>
 
               <div className="flex items-center gap-3">
+                <ThemeToggle />
                 <button
                   type="button"
                   onClick={() => navigate('/dashboard')}
-                  className="hidden text-sm font-medium text-text-primary transition hover:text-primary-500 md:inline-flex"
+                  className="button-ghost hidden rounded-full px-4 py-2 text-sm font-medium text-text-primary transition hover:text-primary-500 md:inline-flex"
                 >
                   Sign in
                 </button>
@@ -389,7 +440,7 @@ export default function Landing() {
                 </Button>
                 <button
                   type="button"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/75 bg-white/80 text-text-primary shadow-[0_18px_40px_-28px_rgba(28,38,71,0.28)]"
+                  className="button-ghost flex h-11 w-11 items-center justify-center rounded-full text-text-primary shadow-[0_18px_40px_-28px_rgba(28,38,71,0.28)]"
                 >
                   <Menu className="h-5 w-5" />
                 </button>
@@ -425,7 +476,7 @@ export default function Landing() {
                 whileTap={{ scale: 0.95 }}
                 type="button"
                 onClick={() => navigate('/dashboard')}
-                className="landing-card inline-flex items-center gap-3 rounded-full px-5 py-3 text-sm font-medium text-text-primary shadow-sm"
+                className="button-secondary inline-flex items-center gap-3 rounded-full px-5 py-3 text-sm font-medium text-text-primary shadow-sm"
               >
                 <Play className="h-4 w-4" />
                 Explore product shell
@@ -485,7 +536,7 @@ export default function Landing() {
                       whileTap={{ scale: 0.95 }}
                       type="button"
                       onClick={() => navigate('/audit/new/upload')}
-                      className="inline-flex items-center gap-3 rounded-full bg-primary-500 px-6 py-3.5 text-sm font-medium text-white shadow-[0_18px_40px_-24px_rgba(91,97,255,0.7)] transition-colors hover:bg-primary-600"
+                      className="button-primary inline-flex items-center gap-3 rounded-full px-6 py-3.5 text-sm font-medium text-white transition-colors"
                     >
                       Explore AI Auditor
                       <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
@@ -581,7 +632,7 @@ export default function Landing() {
                 <button
                   type="button"
                   onClick={() => navigate('/dashboard')}
-                  className="landing-card inline-flex items-center gap-3 rounded-full px-5 py-3 text-sm font-medium text-text-primary transition hover:bg-slate-50"
+                  className="button-secondary inline-flex items-center gap-3 rounded-full px-5 py-3 text-sm font-medium text-text-primary transition"
                 >
                   Open workspace
                   <Workflow className="h-4 w-4" />

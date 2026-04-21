@@ -40,12 +40,12 @@ export default function Certificate() {
       >
         <Card tone="accent" className="rounded-[34px]">
           <Badge variant="accent">Certificate preview</Badge>
-          <div className="mt-6 rounded-[30px] border border-white/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(255,255,255,0.66))] p-6 shadow-[0_24px_60px_-34px_rgba(17,33,59,0.38)]">
+          <div className="theme-surface-strong mt-6 rounded-[30px] p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">FairLens Certificate</p>
                 <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
-                  FairScore 84 · Conditional approval
+                  FairScore 84 - Conditional approval
                 </h2>
               </div>
               <BadgeCheck className="h-8 w-8 text-success-600" />
@@ -58,7 +58,7 @@ export default function Certificate() {
                 'Includes mitigation summary',
                 'Ready for stakeholder review',
               ].map((item) => (
-                <div key={item} className="rounded-[20px] border border-white/55 bg-white/62 px-4 py-4 text-sm text-text-secondary">
+                <div key={item} className="theme-surface-soft rounded-[20px] px-4 py-4 text-sm text-text-secondary">
                   {item}
                 </div>
               ))}

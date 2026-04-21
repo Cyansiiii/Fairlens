@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 import SmoothScroll from './components/premium/SmoothScroll';
 import Landing from './pages/Landing';
@@ -11,6 +12,7 @@ import SimulationStudio from './pages/SimulationStudio';
 import FixWorkspace from './pages/FixWorkspace';
 import Certificate from './pages/Certificate';
 import Settings from './pages/Settings';
+import { useThemeStore } from './store';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +24,12 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  const initializeTheme = useThemeStore((state) => state.initializeTheme);
+
+  useEffect(() => {
+    initializeTheme();
+  }, [initializeTheme]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>

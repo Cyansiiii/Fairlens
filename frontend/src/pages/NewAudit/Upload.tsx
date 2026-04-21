@@ -63,7 +63,7 @@ export default function UploadPage() {
 
   return (
     <AppShell
-      eyebrow="New Audit · Step 1 of 3"
+      eyebrow="New Audit - Step 1 of 3"
       title="Bring in the dataset or model you want to challenge."
       description="The redesigned intake surface makes uploads feel deliberate: secure, legible, and ready for a premium audit workflow."
       actions={(
@@ -81,9 +81,9 @@ export default function UploadPage() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]"
+        className="w-full"
       >
-        <Card className="rounded-[34px] p-0 overflow-hidden">
+        <Card className="rounded-[34px] overflow-hidden p-0">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="relative flex flex-col p-6 sm:p-8">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,101,242,0.08),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(18,179,168,0.1),transparent_30%)]" />
@@ -105,7 +105,7 @@ export default function UploadPage() {
                     'mt-8 flex flex-1 cursor-pointer flex-col items-center justify-center rounded-[30px] border border-dashed p-6 transition duration-300',
                     isDragActive
                       ? 'border-primary-300 bg-primary-50/60 shadow-[0_24px_60px_-34px_rgba(0,101,242,0.42)]'
-                      : 'border-white/60 bg-white/58 hover:-translate-y-1 hover:bg-white/72',
+                      : 'theme-surface-dashed theme-surface-hover',
                   )}
                 >
                   <input {...getInputProps()} />
@@ -130,7 +130,7 @@ export default function UploadPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="rounded-[26px] border border-white/60 bg-white/70 p-5 shadow-[0_20px_50px_-32px_rgba(17,33,59,0.38)]">
+                    <div className="theme-surface rounded-[26px] p-5">
                       <div className="flex items-start gap-4">
                         <div className="flex h-14 w-14 items-center justify-center rounded-[20px] gradient-primary text-white">
                           <FileIcon className="h-7 w-7" />
@@ -140,7 +140,7 @@ export default function UploadPage() {
                             <div>
                               <p className="truncate font-semibold text-text-primary">{selectedFile.name}</p>
                               <p className="mt-1 text-sm text-text-secondary">
-                                {formatFileSize(selectedFile.size)} · staged for configuration
+                                {formatFileSize(selectedFile.size)} - staged for configuration
                               </p>
                             </div>
                             <button
@@ -149,7 +149,7 @@ export default function UploadPage() {
                                 event.stopPropagation();
                                 setSelectedFile(null);
                               }}
-                              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/72 text-text-secondary transition hover:text-text-primary"
+                              className="button-ghost flex h-9 w-9 items-center justify-center rounded-full text-text-secondary transition hover:text-text-primary"
                             >
                               <X className="h-4 w-4" />
                             </button>
@@ -163,7 +163,7 @@ export default function UploadPage() {
                             ].map((item) => (
                               <div
                                 key={item.label}
-                                className="rounded-[18px] border border-white/55 bg-white/60 px-3 py-3"
+                                className="theme-surface-soft rounded-[18px] px-3 py-3"
                               >
                                 <p className="text-xs uppercase tracking-[0.22em] text-text-tertiary">{item.label}</p>
                                 <p className="mt-2 text-sm font-semibold text-text-primary">{item.value}</p>
@@ -178,7 +178,7 @@ export default function UploadPage() {
               </div>
             </div>
 
-            <div className="border-t border-white/50 bg-[linear-gradient(180deg,rgba(255,255,255,0.74),rgba(255,255,255,0.5))] p-6 sm:p-8 lg:border-l lg:border-t-0">
+            <div className="border-t border-[var(--surface-card-border)] bg-[var(--surface-card-bg-strong)] p-6 sm:p-8 lg:border-l lg:border-t-0">
               <Badge variant="neutral">Before you continue</Badge>
               <div className="mt-5 space-y-4">
                 {[
@@ -198,10 +198,7 @@ export default function UploadPage() {
                     description: 'The next step pre-populates sensitive attributes and target columns to reduce friction.',
                   },
                 ].map((item) => (
-                  <div
-                    key={item.title}
-                    className="rounded-[24px] border border-white/55 bg-white/62 p-4 shadow-[0_18px_40px_-32px_rgba(17,33,59,0.36)]"
-                  >
+                  <div key={item.title} className="theme-surface rounded-[24px] p-4">
                     <div className="flex items-center gap-3">
                       <div className="flex h-11 w-11 items-center justify-center rounded-[18px] bg-primary-50 text-primary-600">
                         <item.icon className="h-5 w-5" />
@@ -213,7 +210,7 @@ export default function UploadPage() {
                 ))}
               </div>
 
-              <div className="mt-5 rounded-[24px] border border-dashed border-white/60 bg-white/42 p-4">
+              <div className="theme-surface-dashed mt-5 rounded-[24px] p-4">
                 <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Suggested payloads</p>
                 <p className="mt-2 text-sm text-text-secondary">
                   Hiring outcomes, lending approvals, triage decisions, and feature importance exports all work well with this flow.

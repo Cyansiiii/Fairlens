@@ -38,19 +38,19 @@ export default function Settings() {
             <Badge variant="neutral">Account</Badge>
             <Settings2 className="h-5 w-5 text-text-tertiary" />
           </div>
-          <div className="mt-5 space-y-4">
-            {[
-              ['Email', 'dev@fairlens.local'],
-              ['Plan', 'Growth workspace preview'],
-              ['Workspace', 'FairLens Demo Org'],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-[22px] border border-white/55 bg-white/60 px-4 py-4">
-                <p className="text-xs uppercase tracking-[0.22em] text-text-tertiary">{label}</p>
-                <p className="mt-2 text-sm font-semibold text-text-primary">{value}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
+            <div className="mt-5 space-y-4">
+              {[
+                ['Email', 'dev@fairlens.local'],
+                ['Plan', 'Growth workspace preview'],
+                ['Workspace', 'FairLens Demo Org'],
+              ].map(([label, value]) => (
+                <div key={label} className="theme-surface rounded-[22px] px-4 py-4">
+                  <p className="text-xs uppercase tracking-[0.22em] text-text-tertiary">{label}</p>
+                  <p className="mt-2 text-sm font-semibold text-text-primary">{value}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
 
         <div className="grid gap-6">
           <Card tone="success" className="rounded-[34px]">

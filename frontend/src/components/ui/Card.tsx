@@ -20,7 +20,7 @@ export default function Card({
   return (
     <div
       className={clsx(
-        'glass-panel rounded-[28px] border-white/55 shadow-[0_28px_80px_-40px_rgba(17,33,59,0.36)]',
+        'glass-panel rounded-[28px] shadow-[0_28px_80px_-40px_rgba(17,33,59,0.36)]',
         hover && 'premium-card-hover',
         {
           'shadow-[0_0_0_1px_rgba(0,101,242,0.06),0_28px_80px_-40px_rgba(0,101,242,0.38)]': tone === 'accent',
