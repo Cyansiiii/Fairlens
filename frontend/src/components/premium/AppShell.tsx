@@ -67,18 +67,19 @@ export default function AppShell({
     <div className="relative min-h-screen overflow-hidden">
       <div className="page-backdrop" />
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-8rem] top-[6rem] h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(18,179,168,0.18),transparent_62%)] blur-3xl" />
-        <div className="absolute right-[-10rem] top-[4rem] h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(0,101,242,0.16),transparent_60%)] blur-3xl" />
-        <div className="absolute bottom-[-8rem] left-[30%] h-[20rem] w-[20rem] rounded-full bg-[radial-gradient(circle,rgba(255,127,102,0.14),transparent_60%)] blur-3xl" />
+        <div className="absolute left-[-8rem] top-[6rem] h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(115,99,255,0.18),transparent_62%)] blur-3xl" />
+        <div className="absolute right-[-10rem] top-[4rem] h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(89,196,255,0.16),transparent_60%)] blur-3xl" />
+        <div className="absolute bottom-[-8rem] left-[30%] h-[20rem] w-[20rem] rounded-full bg-[radial-gradient(circle,rgba(255,195,235,0.14),transparent_60%)] blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1480px] px-4 py-4 sm:px-6 lg:px-8 lg:py-8">
-        <div className="grid gap-6 xl:items-start xl:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className="glass-panel glass-panel-strong rounded-[30px] p-4 sm:p-5 xl:sticky xl:top-6 xl:self-start">
+      <div className="relative mx-auto max-w-[1540px] px-4 py-4 sm:px-6 lg:px-8 lg:py-8">
+        <div className="grid gap-7 xl:items-start xl:grid-cols-[292px_minmax(0,1fr)]">
+          <aside className="glass-panel glass-panel-strong relative rounded-[34px] p-4 sm:p-5 xl:sticky xl:top-6 xl:self-start">
+            <div className="noise-mask opacity-[0.08]" />
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="button-secondary theme-surface-hover flex w-full items-center gap-3 rounded-[24px] px-3 py-3 text-left"
+              className="button-secondary theme-surface-hover relative z-10 flex w-full items-center gap-3 rounded-[26px] px-3 py-3 text-left"
             >
               <div className="flex h-12 w-12 items-center justify-center rounded-[18px] gradient-primary shadow-[0_20px_50px_-22px_rgba(0,101,242,0.7)]">
                 <ShieldCheck className="h-6 w-6 text-white" />
@@ -91,7 +92,7 @@ export default function AppShell({
               </div>
             </button>
 
-            <div className="mt-6 space-y-2">
+            <div className="relative z-10 mt-6 space-y-2">
               {navigation.map((item) => {
                 const active = isNavActive(location.pathname, item.match);
 
@@ -130,7 +131,7 @@ export default function AppShell({
               })}
             </div>
 
-            <div className="theme-surface-strong mt-6 rounded-[28px] p-4">
+            <div className="theme-surface-strong relative z-10 mt-6 rounded-[30px] p-4">
               <div className="flex items-center justify-between">
                 <Badge variant="accent">Live Workspace</Badge>
                 <span className="h-2.5 w-2.5 rounded-full bg-success-500 shadow-[0_0_0_6px_rgba(24,171,113,0.16)]" />
@@ -173,7 +174,7 @@ export default function AppShell({
               </Button>
             </div>
 
-            <div className="theme-surface-dashed mt-6 rounded-[24px] p-4">
+            <div className="theme-surface-dashed relative z-10 mt-6 rounded-[26px] p-4">
               <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Promise Layer</p>
               <p className="mt-2 text-sm font-semibold text-text-primary">
                 Explainable, certifiable, and tuned for Global South contexts.
@@ -184,10 +185,11 @@ export default function AppShell({
             </div>
           </aside>
 
-          <div className="space-y-6">
-            <header className="glass-panel glass-panel-strong rounded-[32px] p-6 sm:p-8">
+          <div className="space-y-7">
+            <header className="glass-panel glass-panel-strong relative overflow-hidden rounded-[36px] p-6 sm:p-8 lg:p-9">
+              <div className="noise-mask opacity-[0.08]" />
               <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-                <div className="max-w-3xl">
+                <div className="relative z-10 max-w-3xl">
                   <Badge variant="neutral">{eyebrow}</Badge>
                   <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold tracking-[-0.08em] text-text-primary sm:text-5xl">
                     {title}
@@ -198,12 +200,12 @@ export default function AppShell({
                 </div>
 
                 {actions ? (
-                  <div className="flex flex-wrap items-center gap-3">{actions}</div>
+                  <div className="relative z-10 flex flex-wrap items-center gap-3">{actions}</div>
                 ) : null}
               </div>
             </header>
 
-            <main className="space-y-6">{children}</main>
+            <main className="space-y-7">{children}</main>
           </div>
         </div>
       </div>

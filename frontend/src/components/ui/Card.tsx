@@ -20,12 +20,12 @@ export default function Card({
   return (
     <div
       className={clsx(
-        'glass-panel rounded-[28px] shadow-[0_28px_80px_-40px_rgba(17,33,59,0.36)]',
+        'glass-panel rounded-[30px] shadow-[0_34px_92px_-46px_rgba(52,62,142,0.28)]',
         hover && 'premium-card-hover',
         {
-          'shadow-[0_0_0_1px_rgba(0,101,242,0.06),0_28px_80px_-40px_rgba(0,101,242,0.38)]': tone === 'accent',
-          'shadow-[0_0_0_1px_rgba(24,171,113,0.06),0_28px_80px_-40px_rgba(24,171,113,0.32)]': tone === 'success',
-          'shadow-[0_0_0_1px_rgba(246,95,67,0.06),0_28px_80px_-40px_rgba(246,95,67,0.32)]': tone === 'danger',
+          'shadow-[0_0_0_1px_rgba(115,99,255,0.06),0_34px_92px_-44px_rgba(115,99,255,0.34)]': tone === 'accent',
+          'shadow-[0_0_0_1px_rgba(24,171,113,0.06),0_34px_92px_-44px_rgba(24,171,113,0.28)]': tone === 'success',
+          'shadow-[0_0_0_1px_rgba(246,95,67,0.06),0_34px_92px_-44px_rgba(246,95,67,0.28)]': tone === 'danger',
         },
         {
           'p-0': padding === 'none',
