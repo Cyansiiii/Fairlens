@@ -1,24 +1,8 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import {
-  Activity,
-  ArrowRight,
-  Bot,
-  Clock3,
-  FileCheck2,
-  Globe2,
-  Radar,
-  ShieldCheck,
-  Sparkles,
-  WandSparkles,
-  Workflow,
-} from 'lucide-react';
+import { Plus, MoreVertical, FileText, Settings, Bot } from 'lucide-react';
 
 import AppShell from '../components/premium/AppShell';
-import Badge from '../components/ui/Badge';
-import Button from '../components/ui/Button';
-import Card from '../components/ui/Card';
-import Gauge from '../components/ui/Gauge';
 
 const audits = [
   {
@@ -44,224 +28,93 @@ const audits = [
   },
 ];
 
-const protections = [
-  'Proxy feature drift alerts are active',
-  'Cross-region representation checks are running',
-  'Certificate composer is linked to the latest audit narrative',
-];
-
 export default function Dashboard() {
   const navigate = useNavigate();
 
   return (
     <AppShell
-      eyebrow="Operations Cockpit"
-      title="Bias governance, redesigned as a premium command center."
-      description="The workspace now behaves like a polished SaaS product: one place to launch audits, inspect risk, compare interventions, and publish certificates."
+      eyebrow="Workspace"
+      title="My Audits"
       actions={(
-        <>
-          <Button size="lg" onClick={() => navigate('/audit/new/upload')}>
-            Start Audit
-            <WandSparkles className="h-5 w-5" />
-          </Button>
-          <Button variant="secondary" size="lg" onClick={() => navigate('/audit/demo-001/certificate')}>
-            Open Certificate
-            <FileCheck2 className="h-5 w-5" />
-          </Button>
-        </>
+        <button
+          onClick={() => navigate('/settings')}
+          className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+          title="Settings"
+        >
+          <Settings className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
+        </button>
       )}
     >
-      <motion.section
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="grid gap-6 2xl:grid-cols-[1.12fr_0.88fr]"
-      >
-        <Card tone="accent" className="rounded-[34px] overflow-hidden">
-          <div className="grid gap-6 lg:grid-cols-[240px_1fr] lg:items-center">
-            <div className="theme-surface rounded-[28px] p-4">
-              <Gauge score={84} size={190} strokeWidth={11} label="Live workspace confidence" />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
+        >
+          {/* New Audit Card */}
+          <button
+            onClick={() => navigate('/audit/new/upload')}
+            className="group flex flex-col items-center justify-center aspect-[4/5] rounded-2xl border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-primary-500 dark:hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200 p-6 text-center"
+          >
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/40 transition-colors mb-4">
+              <Plus className="h-6 w-6 text-neutral-600 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
             </div>
+            <h3 className="font-medium text-neutral-900 dark:text-neutral-100 group-hover:text-primary-600 dark:group-hover:text-primary-400">
+              New Audit
+            </h3>
+            <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+              Upload dataset or model
+            </p>
+          </button>
 
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="accent">Live FairScore</Badge>
-                <Badge variant="success" dot>
-                  Recovery path available
-                </Badge>
-              </div>
-              <h2 className="mt-4 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
-                One orchestration layer for intake, analysis, mitigation, and trust artifacts.
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-text-secondary">
-                The redesigned dashboard prioritizes the signals a premium governance tool should surface first: operating health, audit momentum, and the next best action for the team.
-              </p>
-
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                {[
-                  { label: 'Active audits', value: '12' },
-                  { label: 'Protected classes tracked', value: '16' },
-                  { label: 'Frameworks mapped', value: '4' },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="theme-surface rounded-[24px] px-4 py-4"
-                  >
-                    <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">{item.label}</p>
-                    <p className="mt-2 font-display text-3xl font-semibold tracking-[-0.06em] text-text-primary">
-                      {item.value}
-                    </p>
+          {/* Existing Audit Cards */}
+          {audits.map((audit, index) => (
+            <motion.div
+              key={audit.auditId}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: index * 0.05 }}
+              onClick={() => navigate(`/audit/${audit.auditId}/results`)}
+              className="relative group flex flex-col aspect-[4/5] rounded-2xl bg-white dark:bg-[#1e1e1e] border border-neutral-200 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-black/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
+            >
+              {/* Top Banner / Theme color hint */}
+              <div className="h-2 w-full bg-gradient-to-r from-primary-500 to-indigo-500 opacity-80" />
+              
+              <div className="p-5 flex flex-col flex-grow">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800">
+                    <FileText className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        <div className="grid gap-6">
-          <Card className="rounded-[34px]">
-            <div className="flex items-center justify-between">
-              <Badge variant="neutral">Protection Stack</Badge>
-              <ShieldCheck className="h-5 w-5 text-accent-600" />
-            </div>
-            <div className="mt-5 space-y-3">
-              {protections.map((item) => (
-                <div
-                  key={item}
-                  className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm text-text-secondary"
-                >
-                  {item}
+                  <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors" onClick={(e) => { e.stopPropagation(); /* TODO: options menu */ }}>
+                    <MoreVertical className="h-4 w-4" />
+                  </button>
                 </div>
-              ))}
-            </div>
-          </Card>
-
-          <Card className="rounded-[34px]">
-            <div className="flex items-center justify-between">
-              <Badge variant="accent">Quick actions</Badge>
-              <Sparkles className="h-5 w-5 text-primary-500" />
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {[
-                {
-                  label: 'Launch simulation',
-                  icon: Workflow,
-                  action: () => navigate('/simulation'),
-                },
-                {
-                  label: 'Review mitigations',
-                  icon: Radar,
-                  action: () => navigate('/audit/demo-001/fix'),
-                },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  onClick={item.action}
-                  className="theme-surface theme-surface-hover rounded-[22px] px-4 py-4 text-left"
-                >
-                  <item.icon className="h-5 w-5 text-primary-500" />
-                  <p className="mt-4 font-semibold text-text-primary">{item.label}</p>
-                </button>
-              ))}
-            </div>
-          </Card>
-        </div>
-      </motion.section>
-
-      <motion.section
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.08 }}
-        className="grid gap-6 xl:grid-cols-[1.04fr_0.96fr]"
-      >
-        <Card className="rounded-[34px]">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <Badge variant="neutral">Recent audits</Badge>
-              <h2 className="mt-3 font-display text-3xl font-semibold tracking-[-0.07em] text-text-primary">
-                The review queue is now readable at a glance.
-              </h2>
-            </div>
-            <Button variant="secondary" onClick={() => navigate('/audit/new/upload')}>
-              New Intake
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="mt-6 space-y-3">
-            {audits.map((audit) => (
-              <button
-                key={audit.auditId}
-                type="button"
-                onClick={() => navigate(`/audit/${audit.auditId}/results`)}
-                className="glass-chip flex w-full items-center gap-4 rounded-[24px] px-4 py-4 text-left transition duration-200 hover:-translate-y-1 hover:shadow-[0_24px_56px_-34px_rgba(17,33,59,0.42)]"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-primary-50 text-primary-600">
-                  <Activity className="h-5 w-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="truncate font-semibold text-text-primary">{audit.filename}</p>
-                    <Badge variant={audit.score >= 80 ? 'success' : audit.score >= 50 ? 'warning' : 'critical'}>
-                      {audit.status}
-                    </Badge>
+                
+                <h3 className="font-semibold text-lg leading-tight text-neutral-900 dark:text-white mb-2 line-clamp-3">
+                  {audit.filename}
+                </h3>
+                
+                <div className="mt-auto pt-4 flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <Bot className="h-4 w-4 text-primary-500" />
+                    <span className="text-xs font-medium text-primary-600 dark:text-primary-400">
+                      Score: {audit.score}
+                    </span>
                   </div>
-                  <p className="mt-1 text-sm text-text-secondary">Updated {audit.updated}</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium truncate">
+                    {audit.status}
+                  </p>
+                  <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
+                    {audit.updated}
+                  </p>
                 </div>
-                <div className="hidden sm:block">
-                  <Gauge score={audit.score} size={92} strokeWidth={8} label="" showGrade={false} />
-                </div>
-                <ArrowRight className="h-5 w-5 flex-shrink-0 text-text-tertiary" />
-              </button>
-            ))}
-          </div>
-        </Card>
-
-        <div className="grid gap-6">
-          <Card className="rounded-[34px]">
-            <div className="flex items-center justify-between">
-              <Badge variant="accent">Regional coverage</Badge>
-              <Globe2 className="h-5 w-5 text-accent-600" />
-            </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {['Caste', 'Gender', 'Religion', 'Language', 'State', 'Locality'].map((item) => (
-                <div
-                  key={item}
-                  className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm font-semibold text-text-secondary"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          <Card tone="success" className="rounded-[34px]">
-            <div className="flex items-center justify-between">
-              <Badge variant="success">AI copilot prompts</Badge>
-              <Bot className="h-5 w-5 text-success-600" />
-            </div>
-            <div className="mt-5 space-y-3">
-              {[
-                'Summarize the riskiest subgroup deltas for leadership.',
-                'Draft mitigation options for the current model version.',
-                'Explain why the certificate is blocked in plain language.',
-              ].map((prompt) => (
-                <div
-                  key={prompt}
-                  className="theme-surface-soft rounded-[22px] px-4 py-4 text-sm text-text-secondary"
-                >
-                  {prompt}
-                </div>
-              ))}
-            </div>
-            <div className="mt-5 flex items-center gap-3 text-sm text-text-tertiary">
-              <Clock3 className="h-4 w-4" />
-              Response window under 2 seconds for cached audit narratives.
-            </div>
-          </Card>
-        </div>
-      </motion.section>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
     </AppShell>
   );
 }
+
