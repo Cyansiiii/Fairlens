@@ -355,56 +355,7 @@ function HeroMockup() {
         </div>
       </motion.div>
 
-      <motion.div
-        whileHover={{ y: -6 }}
-        className="landing-card absolute left-[2%] top-[18%] z-20 rounded-full px-4 py-3 text-sm font-medium text-text-primary shadow-lg"
-      >
-        Bias detected in hiring outcomes
-      </motion.div>
 
-      <motion.div
-        whileHover={{ y: -6 }}
-        className="landing-card absolute right-[4%] top-[18%] z-20 rounded-[24px] px-4 py-4 shadow-lg"
-      >
-        <p className="text-[0.65rem] uppercase tracking-[0.22em] text-text-tertiary">
-          FairScore
-        </p>
-        <p className="mt-2 text-3xl font-semibold tracking-[-0.06em] text-text-primary">72</p>
-      </motion.div>
-
-      <motion.div
-        whileHover={{ y: -6 }}
-        className="landing-card absolute right-[0%] top-[34%] z-20 hidden max-w-[13rem] rounded-full px-4 py-3 text-sm font-medium text-text-primary shadow-lg sm:block"
-      >
-        Auto-mitigation path ready
-      </motion.div>
-
-      <motion.div
-        whileHover={{ y: -6 }}
-        className="landing-card absolute bottom-[2%] left-[8%] z-20 hidden rounded-full px-4 py-3 text-sm font-medium text-text-primary shadow-lg sm:block"
-      >
-        Answered to 12 private messages!
-      </motion.div>
-
-      <motion.div
-        whileHover={{ y: -6, scale: 1.02 }}
-        className="landing-card absolute bottom-[12%] right-[8%] z-20 hidden w-[17rem] overflow-hidden rounded-[28px] p-0 shadow-[0_30px_80px_-40px_rgba(61,71,146,0.52)] sm:block"
-      >
-        <div className="h-36 bg-[linear-gradient(180deg,#dce4ff_0%,#e6d9ff_38%,#a8d5ff_100%)]" />
-        <div className="px-4 py-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="truncate font-semibold text-text-primary">Ben Timona</p>
-              <p className="truncate text-sm text-text-secondary">
-                I want to ask you a question...
-              </p>
-            </div>
-            <button className="button-primary shrink-0 rounded-full px-4 py-2 text-sm font-medium text-white">
-              Answer
-            </button>
-          </div>
-        </div>
-      </motion.div>
 
       <DecorativeAvatar
         className="left-[18%] top-[8%] h-16 w-16"
@@ -601,32 +552,7 @@ function CopilotVisual() {
         </div>
       </motion.div>
 
-      <motion.div
-        whileHover={{ y: -5 }}
-        className="landing-card absolute bottom-[6%] left-[4%] z-30 hidden rounded-full px-4 py-3 text-sm font-medium text-text-primary shadow-lg sm:block"
-      >
-        Answered to 12 private messages!
-      </motion.div>
 
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        className="landing-card absolute bottom-[14%] left-[6%] z-30 hidden w-[34%] overflow-hidden rounded-[28px] p-0 shadow-xl sm:block"
-      >
-        <div className="h-44 bg-[linear-gradient(180deg,#dadcf7_0%,#f0d5ea_36%,#afd8ff_100%)]" />
-        <div className="px-4 py-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="truncate font-semibold text-text-primary">Ben Timona</p>
-              <p className="truncate text-sm text-text-secondary">
-                I want to ask you a question...
-              </p>
-            </div>
-            <button className="button-primary shrink-0 rounded-full px-4 py-2 text-sm font-medium text-white transition">
-              Answer
-            </button>
-          </div>
-        </div>
-      </motion.div>
 
       <DecorativeAvatar
         className="left-[76%] top-[4%] h-12 w-12"
@@ -867,31 +793,7 @@ function SandboxVisual() {
         </div>
       </motion.div>
 
-      <motion.div
-        whileHover={{ y: -5 }}
-        className="landing-card absolute right-[2%] top-[80%] z-30 rounded-[22px] px-4 py-3 text-sm text-text-primary shadow-lg sm:right-[3%] sm:top-[34%]"
-      >
-        That was super fast, thank you so much!
-      </motion.div>
 
-      <motion.div
-        whileHover={{ y: -5 }}
-        className="landing-card absolute bottom-0 left-[2%] z-30 w-[12rem] rounded-[24px] px-4 py-4 shadow-lg sm:bottom-[6%] sm:left-[4%] sm:w-[14rem]"
-      >
-        <p className="text-xs uppercase tracking-[0.24em] text-text-tertiary">Review note</p>
-        <p className="mt-2 text-xs text-text-secondary sm:text-sm">
-          All audits run in secure cloud sandboxes with isolated execution.
-        </p>
-      </motion.div>
-
-      <motion.div
-        whileHover={{ y: -5 }}
-        className="landing-card absolute bottom-[18%] right-[2%] z-20 w-[14rem] rounded-[24px] px-4 py-4 shadow-lg sm:bottom-[10%] sm:right-[4%] sm:w-[15rem]"
-      >
-        <p className="text-xs text-text-secondary sm:text-sm">
-          Monitoring the feed and liking what the behavior type says should be liked.
-        </p>
-      </motion.div>
     </div>
   );
 }
