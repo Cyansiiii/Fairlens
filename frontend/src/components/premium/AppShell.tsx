@@ -13,6 +13,7 @@ import {
 
 import Badge from '../ui/Badge';
 import Button from '../ui/Button';
+import ThemeToggle from '../ui/ThemeToggle';
 
 interface AppShellProps {
   eyebrow: string;
@@ -199,9 +200,10 @@ export default function AppShell({
                   </p>
                 </div>
 
-                {actions ? (
-                  <div className="relative z-10 flex flex-wrap items-center gap-3">{actions}</div>
-                ) : null}
+                <div className="relative z-10 flex flex-wrap items-center gap-3">
+                  <ThemeToggle />
+                  {actions}
+                </div>
               </div>
             </header>
 

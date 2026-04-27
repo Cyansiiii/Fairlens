@@ -35,6 +35,7 @@ export default function Dashboard() {
     <AppShell
       eyebrow="Workspace"
       title="My Audits"
+      description="Track active audits, jump back into evidence review, and launch fresh scans from a workspace that now stays aligned with the rest of the premium shell."
       actions={(
         <button
           onClick={() => navigate('/settings')}
@@ -52,7 +53,6 @@ export default function Dashboard() {
           transition={{ duration: 0.5 }}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
         >
-          {/* New Audit Card */}
           <button
             onClick={() => navigate('/audit/new/upload')}
             className="group flex flex-col items-center justify-center aspect-[4/5] rounded-2xl border-2 border-dashed border-neutral-300 dark:border-neutral-700 hover:border-primary-500 dark:hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200 p-6 text-center"
@@ -68,7 +68,6 @@ export default function Dashboard() {
             </p>
           </button>
 
-          {/* Existing Audit Cards */}
           {audits.map((audit, index) => (
             <motion.div
               key={audit.auditId}
@@ -78,23 +77,27 @@ export default function Dashboard() {
               onClick={() => navigate(`/audit/${audit.auditId}/results`)}
               className="relative group flex flex-col aspect-[4/5] rounded-2xl bg-white dark:bg-[#1e1e1e] border border-neutral-200 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-black/40 hover:-translate-y-1 transition-all duration-300 cursor-pointer overflow-hidden"
             >
-              {/* Top Banner / Theme color hint */}
               <div className="h-2 w-full bg-gradient-to-r from-primary-500 to-indigo-500 opacity-80" />
-              
+
               <div className="p-5 flex flex-col flex-grow">
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800">
                     <FileText className="h-5 w-5 text-neutral-700 dark:text-neutral-300" />
                   </div>
-                  <button className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors" onClick={(e) => { e.stopPropagation(); /* TODO: options menu */ }}>
+                  <button
+                    className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
                     <MoreVertical className="h-4 w-4" />
                   </button>
                 </div>
-                
+
                 <h3 className="font-semibold text-lg leading-tight text-neutral-900 dark:text-white mb-2 line-clamp-3">
                   {audit.filename}
                 </h3>
-                
+
                 <div className="mt-auto pt-4 flex flex-col gap-2">
                   <div className="flex items-center gap-2">
                     <Bot className="h-4 w-4 text-primary-500" />
@@ -117,4 +120,3 @@ export default function Dashboard() {
     </AppShell>
   );
 }
-

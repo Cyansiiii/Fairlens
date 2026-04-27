@@ -5,20 +5,15 @@ import Lenis from 'lenis';
 export default function SmoothScroll() {
   const location = useLocation();
   const lenisRef = useRef<Lenis | null>(null);
+  const disableSmoothScroll = /^\/audit\/[^/]+\/results$/.test(location.pathname);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || disableSmoothScroll) {
       return;
     }
 
-    // Initialize Lenis
     const lenis = new Lenis({
       autoRaf: true,
-    });
-
-    // Listen for the scroll event and log the event data
-    lenis.on('scroll', (e) => {
-      console.log(e);
     });
 
     lenisRef.current = lenis;
@@ -27,7 +22,7 @@ export default function SmoothScroll() {
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, []);
+  }, [disableSmoothScroll]);
 
   useEffect(() => {
     if (!lenisRef.current || location.hash) {
