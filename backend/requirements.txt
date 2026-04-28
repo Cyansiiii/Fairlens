@@ -20,18 +20,18 @@ langchain-community==0.2.1
 
 # Bias Detection & ML
 aif360==0.6.1
-scikit-learn==1.4.2
-onnxruntime==1.17.3
-pandas==2.2.2
-numpy==1.26.4
-scipy==1.13.0
+scikit-learn>=1.4.2
+onnxruntime>=1.17.3
+pandas>=2.2.2
+numpy>=1.26.4
+scipy>=1.13.0
 
 # Explainability
-lime==0.2.0.1
-shap==0.45.0
+lime>=0.2.0.1
+shap>=0.45.0
 
 # Synthetic Data
-sdv==1.12.1
+sdv>=1.19.0
 
 # Async Task Queue
 celery[redis]==5.4.0
