@@ -9,5 +9,10 @@
       "entrypoint": "backend",
       "routePrefix": "/_/backend"
     }
+  },
+  "functions": {
+    "backend/**": {
+      "excludeFiles": "{node_modules,**/__pycache__}/**"
+    }
   }
 }

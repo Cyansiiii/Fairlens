@@ -19,6 +19,10 @@ langchain-google-genai==1.0.5
 langchain-community==0.2.1
 
 # Bias Detection & ML
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.3.0+cpu
+torchvision==0.18.0+cpu
+torchaudio==2.3.0+cpu
 aif360==0.6.1
 scikit-learn>=1.4.2
 onnxruntime>=1.17.3
