@@ -19,6 +19,8 @@ import AppShell from '../../components/premium/AppShell';
 import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import { uploadDataset } from '../../api/endpoints';
+import { useAuditStore } from '../../store';
 import { formatFileSize } from '../../utils';
 
 const ACCEPTED_TYPES = {
@@ -26,16 +28,20 @@ const ACCEPTED_TYPES = {
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
   'application/octet-stream': ['.pkl', '.onnx'],
   'application/json': ['.json'],
+  'application/pdf': ['.pdf'],
 };
 
 export default function UploadPage() {
   const navigate = useNavigate();
+  const setCurrentUpload = useAuditStore((state) => state.setCurrentUpload);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       setSelectedFile(acceptedFiles[0]);
+      setUploadError('');
     }
   }, []);
 
@@ -52,12 +58,22 @@ export default function UploadPage() {
     }
 
     setUploading(true);
-    setTimeout(() => {
+    setUploadError('');
+
+    try {
+      const upload = await uploadDataset(selectedFile);
+      setCurrentUpload(upload);
+      window.localStorage.setItem('fairlens_current_upload', JSON.stringify(upload));
       navigate('/audit/new/configure');
-    }, 1200);
+    } catch {
+      setUploadError('Upload failed. Please make sure the backend is running, then try again.');
+    } finally {
+      setUploading(false);
+    }
   };
 
-  const FileIcon = selectedFile?.name.endsWith('.csv') || selectedFile?.name.endsWith('.xlsx')
+  const lowerFileName = selectedFile?.name.toLowerCase() ?? '';
+  const FileIcon = lowerFileName.endsWith('.csv') || lowerFileName.endsWith('.xlsx')
     ? FileSpreadsheet
     : FileCode;
 
@@ -119,10 +135,10 @@ export default function UploadPage() {
                         {isDragActive ? 'Release to stage your file' : 'Drag, drop, or browse your audit asset'}
                       </p>
                       <p className="mt-3 max-w-md text-sm leading-7 text-text-secondary">
-                        CSV, XLSX, PKL, ONNX, and JSON are supported. The new upload surface is tuned to feel like a polished SaaS console, not a generic dropzone.
+                        CSV, XLSX, PDF, PKL, ONNX, and JSON are supported. The new upload surface is tuned to feel like a polished SaaS console, not a generic dropzone.
                       </p>
                       <div className="mt-6 flex flex-wrap justify-center gap-2">
-                        {['CSV', 'XLSX', 'PKL', 'ONNX', 'JSON'].map((ext) => (
+                        {['CSV', 'XLSX', 'PDF', 'PKL', 'ONNX', 'JSON'].map((ext) => (
                           <span key={ext} className="glass-chip rounded-full px-3 py-1.5 text-xs font-semibold text-text-secondary">
                             .{ext.toLowerCase()}
                           </span>
@@ -176,6 +192,11 @@ export default function UploadPage() {
                   )}
                 </div>
               </div>
+              {uploadError ? (
+                <p className="relative mt-4 rounded-2xl border border-critical-200 bg-critical-50 px-4 py-3 text-sm font-medium text-critical-700">
+                  {uploadError}
+                </p>
+              ) : null}
             </div>
 
             <div className="border-t border-[var(--surface-card-border)] bg-[var(--surface-card-bg-strong)] p-6 sm:p-8 lg:border-l lg:border-t-0">

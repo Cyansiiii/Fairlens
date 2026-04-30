@@ -15,6 +15,8 @@ import AppShell from '../../components/premium/AppShell';
 import Badge from '../../components/ui/Badge';
 import Button from '../../components/ui/Button';
 import Card from '../../components/ui/Card';
+import { useAuditStore } from '../../store';
+import type { UploadResponse } from '../../types';
 
 const SENSITIVE_ATTRIBUTES = [
   'gender',
@@ -58,8 +60,18 @@ const frameworks = [
   },
 ];
 
+const getStoredUpload = (): UploadResponse | null => {
+  try {
+    const upload = window.localStorage.getItem('fairlens_current_upload');
+    return upload ? JSON.parse(upload) as UploadResponse : null;
+  } catch {
+    return null;
+  }
+};
+
 export default function ConfigurePage() {
   const navigate = useNavigate();
+  const currentUpload = useAuditStore((state) => state.currentUpload) ?? getStoredUpload();
   const [selectedAttrs, setSelectedAttrs] = useState<string[]>(['gender', 'caste', 'name']);
   const [targetColumn, setTargetColumn] = useState('decision');
   const [framework, setFramework] = useState('all');
@@ -73,7 +85,7 @@ export default function ConfigurePage() {
   };
 
   const handleStartScan = () => {
-    navigate('/audit/demo-001/results');
+    navigate(`/audit/${currentUpload?.audit_id ?? 'demo-001'}/results`);
   };
 
   return (
@@ -84,7 +96,7 @@ export default function ConfigurePage() {
       actions={(
         <>
           <Badge variant="success" size="md">
-            Upload staged successfully
+            {currentUpload ? `${currentUpload.filename} staged` : 'Upload staged successfully'}
           </Badge>
           <Button variant="secondary" size="lg" onClick={() => navigate('/audit/new/upload')}>
             Back to Upload

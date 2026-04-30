@@ -24,9 +24,17 @@ import {
 
 import ThemeToggle from '../../components/ui/ThemeToggle';
 import { sendChatMessage } from '../../api/endpoints';
-import { useChatStore } from '../../store';
+import { useAuditStore, useChatStore } from '../../store';
+import type { UploadResponse } from '../../types';
 
-const initialSources = [
+type Source = {
+  id: string;
+  name: string;
+  type: 'csv' | 'pdf' | 'model' | 'json';
+  selected: boolean;
+};
+
+const initialSources: Source[] = [
   { id: '1', name: 'hiring_decisions_2024.csv', type: 'csv', selected: true },
   { id: '2', name: 'loan_model_shadow_v2.onnx', type: 'model', selected: false },
   { id: '3', name: 'triage_outcomes_q1.csv', type: 'csv', selected: false },
@@ -45,9 +53,62 @@ const savedNotes = [
   { id: 'n2', title: 'Simulation: Dropping zip code proxy', date: '12d ago' },
 ];
 
+const getSourceType = (filename: string): Source['type'] => {
+  const extension = filename.split('.').pop()?.toLowerCase();
+
+  if (extension === 'csv') {
+    return 'csv';
+  }
+
+  if (extension === 'pdf') {
+    return 'pdf';
+  }
+
+  if (extension === 'json') {
+    return 'json';
+  }
+
+  return 'model';
+};
+
+const getStoredUpload = (): UploadResponse | null => {
+  try {
+    const upload = window.localStorage.getItem('fairlens_current_upload');
+    return upload ? JSON.parse(upload) as UploadResponse : null;
+  } catch {
+    return null;
+  }
+};
+
+const getUploadSource = (upload: UploadResponse | null): Source | null => {
+  if (!upload) {
+    return null;
+  }
+
+  return {
+    id: `upload-${upload.audit_id}`,
+    name: upload.filename,
+    type: getSourceType(upload.filename),
+    selected: true,
+  };
+};
+
 const getChatResponseText = (response: unknown) => {
   if (typeof response === 'string') {
-    const textChunks = Array.from(response.matchAll(/content['"]?\s*:\s*['"]([^'"]+)/g)).map((match) => match[1]);
+    const textChunks = response
+      .split('\n')
+      .filter((line) => line.startsWith('data:'))
+      .map((line) => line.replace(/^data:\s*/, '').trim())
+      .map((line) => {
+        try {
+          const event = JSON.parse(line) as { type?: string; content?: string };
+          return event.type === 'text' ? event.content ?? '' : '';
+        } catch {
+          return '';
+        }
+      })
+      .filter(Boolean);
+
     return textChunks.join(' ').trim() || response.replace(/^data:\s*/gm, '').trim();
   }
 
@@ -67,8 +128,12 @@ export default function ScanResults() {
   const navigate = useNavigate();
   const { auditId } = useParams();
   const resolvedAuditId = auditId ?? 'demo-001';
+  const currentUpload = useAuditStore((state) => state.currentUpload) ?? getStoredUpload();
+  const uploadSource = getUploadSource(currentUpload);
   const [chatInput, setChatInput] = useState('');
-  const [sources, setSources] = useState(initialSources);
+  const [sources, setSources] = useState<Source[]>(() =>
+    uploadSource ? [uploadSource, ...initialSources] : initialSources,
+  );
   const [sourceQuery, setSourceQuery] = useState('');
   const [sourceMode, setSourceMode] = useState<'web' | 'research'>('web');
   const [notes, setNotes] = useState(savedNotes);
@@ -385,8 +450,8 @@ export default function ScanResults() {
                     <div
                       className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                         message.role === 'user'
-                          ? 'bg-slate-900 text-white dark:bg-white dark:text-black'
-                          : 'border border-slate-200 bg-slate-50 text-slate-700 dark:border-white/10 dark:bg-[#131314] dark:text-neutral-200'
+                          ? 'bg-slate-900 text-white selection:bg-white selection:text-slate-900 dark:bg-white dark:text-black dark:selection:bg-slate-900 dark:selection:text-white'
+                          : 'border border-slate-200 bg-slate-50 text-slate-700 selection:bg-slate-900 selection:text-white dark:border-white/10 dark:bg-[#131314] dark:text-neutral-200 dark:selection:bg-white dark:selection:text-black'
                       }`}
                     >
                       {message.content}
