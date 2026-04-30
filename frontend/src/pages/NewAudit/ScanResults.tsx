@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -23,6 +23,8 @@ import {
 } from 'lucide-react';
 
 import ThemeToggle from '../../components/ui/ThemeToggle';
+import { sendChatMessage } from '../../api/endpoints';
+import { useChatStore } from '../../store';
 
 const initialSources = [
   { id: '1', name: 'hiring_decisions_2024.csv', type: 'csv', selected: true },
@@ -34,14 +36,32 @@ const studioActions = [
   { id: 'sim', name: 'Run Simulation', icon: SlidersHorizontal, color: 'text-blue-500 dark:text-blue-400', path: '/simulation' },
   { id: 'mit', name: 'Apply Mitigation', icon: ShieldAlert, color: 'text-amber-500 dark:text-amber-400', path: 'fix' },
   { id: 'cert', name: 'Generate Certificate', icon: FileBadge, color: 'text-green-500 dark:text-green-400', path: 'certificate' },
-  { id: 'rep', name: 'FairScore Report', icon: BarChart2, color: 'text-violet-500 dark:text-purple-400', path: '#' },
-  { id: 'feat', name: 'Feature Importance', icon: Sparkles, color: 'text-pink-500 dark:text-pink-400', path: '#' },
+  { id: 'rep', name: 'FairScore Report', icon: BarChart2, color: 'text-violet-500 dark:text-purple-400', path: 'certificate' },
+  { id: 'feat', name: 'Feature Importance', icon: Sparkles, color: 'text-pink-500 dark:text-pink-400', path: '/simulation' },
 ];
 
 const savedNotes = [
   { id: 'n1', title: 'High Disparate Impact in Age group', date: '12d ago' },
   { id: 'n2', title: 'Simulation: Dropping zip code proxy', date: '12d ago' },
 ];
+
+const getChatResponseText = (response: unknown) => {
+  if (typeof response === 'string') {
+    const textChunks = Array.from(response.matchAll(/content['"]?\s*:\s*['"]([^'"]+)/g)).map((match) => match[1]);
+    return textChunks.join(' ').trim() || response.replace(/^data:\s*/gm, '').trim();
+  }
+
+  if (response && typeof response === 'object') {
+    const data = response as { message?: unknown; content?: unknown; response?: unknown };
+    const content = data.message ?? data.content ?? data.response;
+
+    if (typeof content === 'string') {
+      return content;
+    }
+  }
+
+  return 'I received your question, but the response format was not recognized.';
+};
 
 export default function ScanResults() {
   const navigate = useNavigate();
@@ -51,6 +71,9 @@ export default function ScanResults() {
   const [sources, setSources] = useState(initialSources);
   const [sourceQuery, setSourceQuery] = useState('');
   const [sourceMode, setSourceMode] = useState<'web' | 'research'>('web');
+  const [notes, setNotes] = useState(savedNotes);
+  const { messages, isLoading, addMessage, setLoading } = useChatStore();
+  const conversationEndRef = useRef<HTMLDivElement>(null);
 
   const selectedSourcesCount = sources.filter((source) => source.selected).length;
   const allSourcesSelected = sources.every((source) => source.selected);
@@ -58,6 +81,10 @@ export default function ScanResults() {
   const filteredSources = normalizedSourceQuery
     ? sources.filter((source) => source.name.toLowerCase().includes(normalizedSourceQuery))
     : sources;
+
+  useEffect(() => {
+    conversationEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [messages.length, isLoading]);
 
   const toggleAllSources = () => {
     setSources((current) =>
@@ -96,6 +123,48 @@ export default function ScanResults() {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(shareUrl);
     }
+  };
+
+  const handleSendMessage = async (event?: FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+
+    const message = chatInput.trim();
+    if (!message || isLoading) {
+      return;
+    }
+
+    addMessage({ role: 'user', content: message });
+    setChatInput('');
+    setLoading(true);
+
+    try {
+      const response = await sendChatMessage(resolvedAuditId, message);
+      addMessage({ role: 'assistant', content: getChatResponseText(response) });
+    } catch {
+      addMessage({
+        role: 'assistant',
+        content: 'I could not reach the FairLens Copilot service. Please make sure the backend is running and you are signed in, then try again.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChatKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      void handleSendMessage();
+    }
+  };
+
+  const handleAddNote = () => {
+    const latestMessage = [...messages].reverse().find((message) => message.content.trim());
+    const title = latestMessage?.content.trim().slice(0, 52) || 'Review fairness mitigation plan';
+
+    setNotes((current) => [
+      { id: crypto.randomUUID(), title, date: 'Just now' },
+      ...current,
+    ]);
   };
 
   return (
@@ -262,8 +331,24 @@ export default function ScanResults() {
           <div className="flex items-center justify-between px-6 py-4">
             <h2 className="text-sm font-medium text-slate-900 dark:text-white">Fairness Copilot</h2>
             <div className="flex items-center gap-3 text-slate-500 dark:text-neutral-400">
-              <SlidersHorizontal className="h-4 w-4 cursor-pointer hover:text-slate-900 dark:hover:text-white" />
-              <MoreVertical className="h-4 w-4 cursor-pointer hover:text-slate-900 dark:hover:text-white" />
+              <button
+                type="button"
+                onClick={() => navigate('/simulation')}
+                className="rounded-full p-1 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"
+                aria-label="Open simulation controls"
+                title="Open simulation controls"
+              >
+                <SlidersHorizontal className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/settings')}
+                className="rounded-full p-1 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-white/10 dark:hover:text-white"
+                aria-label="Open settings"
+                title="Open settings"
+              >
+                <MoreVertical className="h-4 w-4" />
+              </button>
             </div>
           </div>
 
@@ -289,13 +374,48 @@ export default function ScanResults() {
                 Proxy-heavy name and locality features are amplifying the disparity. Mitigation and representation balancing are likely to recover the score into the 80s.
               </p>
             </div>
+
+            {messages.length > 0 ? (
+              <div className="mt-8 space-y-3">
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                        message.role === 'user'
+                          ? 'bg-slate-900 text-white dark:bg-white dark:text-black'
+                          : 'border border-slate-200 bg-slate-50 text-slate-700 dark:border-white/10 dark:bg-[#131314] dark:text-neutral-200'
+                      }`}
+                    >
+                      {message.content}
+                    </div>
+                  </div>
+                ))}
+                {isLoading ? (
+                  <div className="flex justify-start">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500 dark:border-white/10 dark:bg-[#131314] dark:text-neutral-400">
+                      Thinking...
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+            <div ref={conversationEndRef} />
           </div>
 
           <div className="mt-auto p-6 pt-0">
-            <div className="relative flex items-end rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-white/10 dark:bg-[#131314]">
+            <form
+              onSubmit={(event) => {
+                void handleSendMessage(event);
+              }}
+              className="relative flex items-end rounded-2xl border border-slate-200 bg-slate-50 p-2 dark:border-white/10 dark:bg-[#131314]"
+            >
               <textarea
                 value={chatInput}
                 onChange={(event) => setChatInput(event.target.value)}
+                onKeyDown={handleChatKeyDown}
                 placeholder="Ask about fairness metrics, bias findings, or mitigations..."
                 className="min-h-[44px] max-h-[200px] w-full resize-none bg-transparent p-3 text-sm text-slate-900 outline-none cursor-text select-text caret-slate-900 placeholder:text-slate-400 dark:text-white dark:placeholder:text-neutral-500 dark:caret-white"
                 rows={1}
@@ -305,16 +425,20 @@ export default function ScanResults() {
                   {selectedSourcesCount} source{selectedSourcesCount === 1 ? '' : 's'}
                 </span>
                 <button
+                  type="submit"
+                  disabled={!chatInput.trim() || isLoading}
+                  aria-label="Send message"
+                  title="Send message"
                   className={`rounded-full p-2 transition-colors ${
-                    chatInput.trim()
+                    chatInput.trim() && !isLoading
                       ? 'bg-slate-900 text-white dark:bg-white dark:text-black'
-                      : 'bg-slate-200 text-slate-400 dark:bg-white/10 dark:text-neutral-500'
+                      : 'cursor-not-allowed bg-slate-200 text-slate-400 dark:bg-white/10 dark:text-neutral-500'
                   }`}
                 >
                   <Send className="h-4 w-4" />
                 </button>
               </div>
-            </div>
+            </form>
             <p className="mt-3 text-center text-[11px] text-slate-500 dark:text-neutral-500">
               FairLens Copilot can make mistakes. Please verify critical mitigation decisions.
             </p>
@@ -324,7 +448,15 @@ export default function ScanResults() {
         <aside className="flex w-[340px] flex-shrink-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-white/5 dark:bg-[#1e1e1f] dark:shadow-none">
           <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/5">
             <h2 className="text-sm font-medium text-slate-900 dark:text-white">Action Studio</h2>
-            <Sidebar className="h-4 w-4 cursor-pointer text-slate-500 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white" />
+            <button
+              type="button"
+              onClick={() => navigate('/audit/new/upload')}
+              className="rounded-full p-1 transition-colors hover:bg-slate-100 dark:hover:bg-white/10"
+              aria-label="Add sources"
+              title="Add sources"
+            >
+              <Sidebar className="h-4 w-4 text-slate-500 hover:text-slate-900 dark:text-neutral-400 dark:hover:text-white" />
+            </button>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4">
@@ -338,7 +470,8 @@ export default function ScanResults() {
               {studioActions.map((action) => (
                 <button
                   key={action.id}
-                  onClick={() => action.path !== '#' && navigate(action.path.startsWith('/') ? action.path : `/audit/${resolvedAuditId}/${action.path}`)}
+                  type="button"
+                  onClick={() => navigate(action.path.startsWith('/') ? action.path : `/audit/${resolvedAuditId}/${action.path}`)}
                   className="flex flex-col items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-left transition-all hover:border-slate-300 hover:bg-slate-100 dark:border-white/5 dark:bg-[#131314] dark:hover:border-white/20 dark:hover:bg-white/5"
                 >
                   <action.icon className={`h-5 w-5 ${action.color}`} />
@@ -352,18 +485,27 @@ export default function ScanResults() {
                 Saved Insights
               </h3>
 
-              {savedNotes.map((note) => (
-                <div key={note.id} className="group flex cursor-pointer items-start gap-3 rounded-xl p-3 hover:bg-slate-100 dark:hover:bg-white/5">
+              {notes.map((note) => (
+                <button
+                  key={note.id}
+                  type="button"
+                  onClick={() => setChatInput(note.title)}
+                  className="group flex w-full items-start gap-3 rounded-xl p-3 text-left hover:bg-slate-100 dark:hover:bg-white/5"
+                >
                   <MessageSquare className="mt-0.5 h-4 w-4 text-slate-400 dark:text-neutral-400" />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm text-slate-700 dark:text-neutral-300">{note.title}</p>
                     <p className="mt-1 text-xs text-slate-500 dark:text-neutral-500">{note.date}</p>
                   </div>
                   <MoreVertical className="h-4 w-4 text-slate-400 group-hover:text-slate-600 dark:text-neutral-600 dark:group-hover:text-neutral-400" />
-                </div>
+                </button>
               ))}
 
-              <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-700 dark:bg-white dark:text-black dark:hover:bg-neutral-200">
+              <button
+                type="button"
+                onClick={handleAddNote}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 py-3 text-sm font-medium text-white transition-colors hover:bg-slate-700 dark:bg-white dark:text-black dark:hover:bg-neutral-200"
+              >
                 <Plus className="h-4 w-4" /> Add note
               </button>
             </div>

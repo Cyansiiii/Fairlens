@@ -1,6 +1,8 @@
 """
 Chat Router — Conversational agent endpoint
 """
+import json
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 
@@ -23,7 +25,12 @@ async def chat_with_agent(
 
     async def stream_response():
         # TODO: Phase 2 — LangChain agent with Gemini 1.5 Pro
-        yield f"data: {{'type': 'text', 'content': 'Agent response placeholder'}}\n\n"
-        yield f"data: {{'type': 'done'}}\n\n"
+        content = (
+            f"I received your question about audit {audit_id}: \"{request.message}\". "
+            "The live agent is not connected yet, but you can use the findings above to review "
+            "disparate impact, proxy-heavy features, and mitigation options."
+        )
+        yield f"data: {json.dumps({'type': 'text', 'content': content})}\n\n"
+        yield f"data: {json.dumps({'type': 'done'})}\n\n"
 
     return StreamingResponse(stream_response(), media_type="text/event-stream")

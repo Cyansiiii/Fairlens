@@ -170,6 +170,16 @@
   box-sizing: border-box;
 }
 
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']) {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
 html {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
